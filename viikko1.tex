@@ -1,6 +1,13 @@
 \documentclass[12pt,a4paper]{article}
 \input{yhteiset-asetukset.tex}
 
+\newcommand{\set}[1]{\left\{\,#1\,\right\}}
+
+\newcommand{\N}{\mathbb{N}}
+
+\newcommand{\mot}{$\Box$}
+
+
 \title{TKT20005 Laskennan mallit Viikko1}
 \date{}
 
@@ -63,4 +70,62 @@
     \end{alakohta}
 \end{kohta}
 
+
+
+
+
+
+
+
+\pagebreak
+\exercise{2 Vastaesimerkki ja epäsuora todistus.}
+  Tunnetusti kahden luonnollisen luvun summa on luonnollinen luku. Toisin sanoen pätee:
+  \[
+    a\in \N \textrm{ ja } b\in \N \implies a + b\in\N
+  \]
+  \begin{enumerate}
+  \item Tiedetään, että $a$ on luonnollinen luku ja $b$ ei ole luonnollinen luku. Voidaanko tästä päätellä, että $a + b$ ei ole luonnollinen luku? Perustele vastauksesi täsmällisesti antamalla vastaesimerkki tai todistus perustuen yllä olevaan implikaatioon ja epäsuoraan todistustekniikkaan.
+  \item Tiedetään, että $a$ on luonnollinen luku ja $a + b$ ei ole luonnollinen luku. Voidaanko tästä päätellä, että $b$ ei ole luonnollinen luku? Perustele vastauksesi täsmällisesti antamalla vastaesimerkki tai todistus perustuen yllä olevaan implikaatioon ja epäsuoraan todistustekniikkaan.
+  \end{enumerate}
+
+
+
+  \begin{alakohta}
+  \item % a
+    Väite on: $a\in\N \textrm{ ja } b\notin\N \Rightarrow a+b\notin\N$
+
+    On löydettävä sellaiset luvut $a$ ja $b$, joilla alkuoletus pätee
+    ($a\in\N$ ja $b\notin\N$), mutta johtopäätös ei päde ($a+b\in\N$)
+
+    Valitaan a=3 ja b=-2
+    \begin{itemize}
+      \item Tällöin $a=3$ on luonnollinen luku.
+      \item Luku $b=-2$ ei ole luonnollinen luku.
+      \item a+b = 3 + (-2) = 1. Luku 1 on luonnollinen luku; siis a+b$\in\N$
+    \end{itemize}
+    Koska löysimme tapauksen, missä oletukset on voimassa mutta väite
+    ei pidä paikkaansa, emme voi yleisesti sanoa $a+b$ ei ole
+    luonnollinen luku. \textbf{Väite on siis epätosi.} 
+
+  \item % b
+    Väite on: $a\in\N \textrm{ ja } a+b\notin\N \Rightarrow b\notin\N$
+
+    \textbf{Väite on tosi.} Todistetaan tämä epäsuorasti.
+
+    Oletetaan, että $a\in\N$ ja $a+b\notin\N$. Oletetaan vastoin väitettä,
+    että $b$ on luonnollinen luku: $b\in\N$.
+
+    Nyt meillä on tiedossa kaksi asiaa:
+    \begin{itemize}
+      \item Alkuperäisen oletuksen mukaan $a\in\N$.
+      \item Vastaoletuksen mukaan $b\in\N$.
+    \end{itemize}
+    Tehtävänannossa annetun perustiedon mukaan kahden luonnollisen luvun
+    summa on aina luonnollinen luku. Koska a ja b ovat molemmat
+    oletustemme mukaan luonnollisia lukuja, niiden summan a+b on siis
+    pakko olla luonnollinen luku, eli $a+b\in\N$
+
+    Tämä on kuitenkin ristiriidassa alkuperäisen oletuksen kanssa,
+    jonka mukaan $a+b\notin\N$ eli alkuperäinen \textbf{väite on tosi.} 
+\end{alakohta}
 \end{document}
