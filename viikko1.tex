@@ -1,0 +1,66 @@
+\documentclass[12pt,a4paper]{article}
+\input{yhteiset-asetukset.tex}
+
+\title{TKT20005 Laskennan mallit Viikko1}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\exercise{1 Implikaatio ja ekvivalenssi.}
+\begin{enumerate}
+  \item Alicella ja Bobilla on molemmilla lehmiä, jotka laiduntavat samalla niityllä. Tiedämme, että seuraavat loogiset lauseet niityllä olevista lehmistä ovat totta:
+    \begin{align*}
+      &\textrm{``Lehmä on Alicen.''} \implies \textrm{``Lehmä on ruskea.''}\\
+      &\textrm{``Lehmä on Bobin.''} \iff \textrm{``Lehmällä on sarvet.''}
+    \end{align*}
+    Luonnollisella kielellä yllä olevat lauseet voidaan ilmaista esim.:
+    \begin{itemize}
+        \item Jos lehmä on Alicen, se on ruskea.
+        \item Lehmä on Bobin, jos ja vain jos sillä on sarvet.
+    \end{itemize}
+\end{enumerate}
+
+\begin{kohta}
+  \item % a
+    \begin{alakohta}
+      \item \textbf{Lehmä on ruskea.} Implikaatiosta "Jos lehmä on Alicen, 
+      se on ruskea" ($A \Rightarrow R$) ei voi päätellä mitään omistajasta 
+      jos lehmä on ruskea. Ruskea lehmä voi olla Alicen, mutta se voi olla 
+      myös jonkun muun lehmä. 
+      \textbf{Omistajasta ei siis voida päätellä mitään.}
+
+      \item \textbf{Lehmä ei ole ruskea.} Implikaatiosta $A \Rightarrow R$ 
+      seuraa loogisesti $\neg R \implies \neg A$. Tämä 
+      tarkoittaa: "Jos lehmä ei ole ruskea, se ei ole Alicen." Koska 
+      lehmä ei ole ruskea,
+      \textbf{voimme varmuudella sanoa, että lehmä ei ole Alicen}
+
+      \item \textbf{Lehmällä on sarvet.} Ekvivalenssi "Lehmä on Bobin, jos
+      ja vain jos sillä on sarvet" ($B \iff S$) tarkoittaa, että lauseilla
+      on aina sama arvo.
+      \textbf{Koska lehmällä on sarvet, sen on oltava Bobin.}
+
+      \item \textbf{Lehmällä ei ole sarvia.} Ekvivalenssin ($B \iff S$)
+      mukaan, jos lehmällä ei ole sarvia, se ei voi olla Bobin.
+      \textbf{Lehmä ei ole Bobin.}
+    \end{alakohta}
+
+  \item % b
+    \begin{alakohta}
+      \item Jos $D$ on tosi, implikaatiosta $A \Rightarrow D$ 
+      \textbf{ei voida päätellä mitään $A$:n totuusarvosta.}
+
+      \item Jos $D$ ei ole tosi, niin $\neg D \Rightarrow \neg A$ nojalla 
+      voidaan todeta, että \textbf{A ei ole tosi.}
+
+      \item Jos tiedetään että $E$ on tosi, ekvivalenssin $B \iff E$ nojalla myös
+      \textbf{B on tosi.}
+
+      \item Jos tiedetään että $E$ ei ole tosi, ekvivalenssin $B \iff E$ nojalla myös
+      \textbf{B ei ole tosi.}
+    \end{alakohta}
+\end{kohta}
+
+\end{document}
