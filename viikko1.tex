@@ -1,5 +1,6 @@
 \documentclass[12pt,a4paper]{article}
 \input{yhteiset-asetukset.tex}
+\usetikzlibrary{arrows.meta}
 
 \newcommand{\set}[1]{\left\{\,#1\,\right\}}
 
@@ -128,4 +129,146 @@
     Tämä on kuitenkin ristiriidassa alkuperäisen oletuksen kanssa,
     jonka mukaan $a+b\notin\N$ eli alkuperäinen \textbf{väite on tosi.} 
 \end{alakohta}
+
+
+
+
+
+
+\pagebreak
+\exercise{3 Induktiotodistus.}
+Todista induktiolla, että
+\[
+1\cdot 2 \cdot 3 + 2\cdot 3\cdot 4 + \cdots + n\cdot (n+1) \cdot (n+2) = \frac{n\cdot(n+1)\cdot(n+2)\cdot(n+3)}{4}.
+\]
+
+\begin{alakohta}
+    
+\item Perusaskel\\
+
+Tarkistetaan, päteekö väite, kun n=1
+\begin{itemize}
+    \item Vasen puoli: $1 \cdot (1+1) \cdot (1+2) = 1 \cdot 2 \cdot 3 = 6$
+    \item Oikea puoli: $\frac{1 \cdot (1+1) \cdot (1+2) \cdot (1+3)}{4} = 
+                        \frac{1 \cdot 2 \cdot 3 \cdot 4}{4} = \frac{24}{4} = 6$
+\end{itemize}
+Koska 6=6 perusaskel on kunnossa.
+
+\item Induktio-oletus\\
+
+Oletetaan, että väite $P(k)$ on tosi mielivaltaisella kokonaisluvulla $k \ge 1$. Oletetaan siis, että:
+\[
+1\cdot 2 \cdot 3 + \cdots + k(k+1)(k+2) = \frac{k(k+1)(k+2)(k+3)}{4}
+\]
+
+\item Induktioaskel\\
+
+Tavoitteenamme on osoittaa, että:
+\[
+\sum_{i=1}^{k+1} i(i+1)(i+2) = \frac{(k+1)((k+1)+1)((k+1)+2)((k+1)+3)}{4} = \frac{(k+1)(k+2)(k+3)(k+4)}{4}
+\]
+
+Aloitetaan vasemmasta puolesta ja käytetään induktio-oletusta:
+\begin{align*}
+    & 1\cdot 2 \cdot 3 + \cdots + k(k+1)(k+2) + (k+1)(k+2)(k+3) \\
+    % käytetään induktio-oletusta
+    &= \left( \frac{k(k+1)(k+2)(k+3)}{4} \right) + (k+1)(k+2)(k+3) \\
+    % yhteinen tekijä
+    &= (k+1)(k+2)(k+3) \left( \frac{k}{4} + 1 \right) \\
+    % lavennetaan
+    &= (k+1)(k+2)(k+3) \left( \frac{k}{4} + \frac{4}{4} \right) \\
+    % yhdistetään murtoluvut
+    &= (k+1)(k+2)(k+3) \left( \frac{k+4}{4} \right) \\
+    % järjestellään termit
+    &= \frac{(k+1)(k+2)(k+3)(k+4)}{4}
+\end{align*}
+Tämä on täsmälleen väitteen $P(k+1)$ oikea puoli.\\
+
+Koska perusaskel on tosi ja induktioaskel on osoitettu paikkansapitäväksi, väite pätee kaikilla positiivisilla kokonaisluvuilla $n \ge 1$.
+\end{alakohta}
+
+
+
+
+\pagebreak
+\exercise{4 Joukko-opin merkinnät ja kahden joukon osoittaminen samoiksi.}
+\begin{kohta}
+  \item % a
+  Annetut joukot ovat $A=\{1,2,3\}$ ja $B=\{2,3,4\}$ luonnollisten lukujen joukossa.
+  
+  Määritetään ensin tarvittavat komplementit ja leikkaukset:
+  \begin{itemize}
+      \item $\overline{A} = \N - A = \{0, 4, 5, 6, \ldots\}$
+      \item $\overline{B} = \N - B = \{0, 1, 5, 6, \ldots\}$
+      \item $\overline{A} \cap B = \{4\}$ (alkiot, jotka ovat B:ssä mutta eivät A:ssa)
+      \item $A \cap \overline{B} = \{1\}$ (alkiot, jotka ovat A:ssa mutta eivät B:ssä)
+  \end{itemize}
+
+  \begin{alakohta}
+    \item 
+    \[
+    (\overline{A}\cap B)\cup(A\cap\overline{B}) = \{4\} \cup \{1\} = \{1, 4\}
+    \]
+
+    \item De Morganin lain mukaan $\overline{\overline{A}\cap\overline{B}} = \overline{\overline{A}} \cup \overline{\overline{B}} = A \cup B$
+    \[
+    A \cup B = \{1,2,3\} \cup \{2,3,4\} = \{1,2,3,4\}
+    \]
+    Siis $\overline{\overline{A}\cap\overline{B}} = \{1,2,3,4\}$
+  \end{alakohta}
+  
+  \item % b
+  Todista, että $(A\cap B)\times(C\cap D)=(A\times C)\cap(B\times D)$
+
+  ...
+\end{kohta}
+
+
+
+
+\pagebreak
+
+
+\exercise {5. Verkot ja leveyssuuntainen haku.}
+Leveyssuuntaispuu (juuri $a$; valinnat aakkosjärjestyksessä):
+
+\begin{center}
+\begin{tikzpicture}[
+  level distance=1.8cm,
+  sibling distance=2.6cm,
+  every node/.style={circle,thick,draw,minimum size=7mm,align=center},
+  edge from parent/.style={draw,-{Stealth}} % <-- nuoli + viiva
+]
+\node (a) {a}
+  child { node (b) {b}
+    child { node (d) {d}
+      child { node (e) {e}
+        child { node (f) {f} }
+      }
+      child { node (g) {g}
+        child { node (h) {h} }
+      }
+    }
+  }
+  child { node (c) {c} };
+\end{tikzpicture}
+\end{center}
+
+
+\pagebreak
+\exercise {6. Kyyhkyslakkaperiaate.}
+Kyyhkyslakkaperiaatteen mukaan, kun $k$ kyyhkystä sijoitetaan $n$ kyyhkyslakkaan, missä $n<k$, ainakin yhteen kyyhkyslakkaan tulee enemmän kuin yksi kyyhkynen. Tätä periaatetta voidaan soveltaa monissa matemaattisissa todistuksissa, joissa $k$ alkiota luokitellaan $n$:ään luokkaan: Jos $n<k$, ainakin yhteen luokkaan tulee enemmän kuin yksi alkio.
+  
+{[Sipser Problem 0.10]}
+Osoita, että jos suuntaamattomassa verkossa on ainakin kaksi solmua,
+niin siinä on kaksi solmua, joiden aste (naapurien lukumäärä)
+on sama.
+(Tässä kuten yleensäkin suuntaamattomassa verkossa ei
+sallita kaarta solmusta itseensä.)\\
+
+
+
+\medskip\noindent
+\textbf{Todistus.}
+...
 \end{document}
