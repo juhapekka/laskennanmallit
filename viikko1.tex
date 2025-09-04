@@ -51,7 +51,7 @@
       \textbf{Koska lehmällä on sarvet, sen on oltava Bobin.}
 
       \item \textbf{Lehmällä ei ole sarvia.} Ekvivalenssin ($B \iff S$)
-      mukaan, jos lehmällä ei ole sarvia, se ei voi olla Bobin.
+      mukaan, koska lehmällä ei ole sarvia se ei voi olla Bobin.
       \textbf{Lehmä ei ole Bobin.}
     \end{alakohta}
 
@@ -95,14 +95,14 @@
   \item % a
     Väite on: $a\in\N \textrm{ ja } b\notin\N \Rightarrow a+b\notin\N$
 
-    On löydettävä sellaiset luvut $a$ ja $b$, joilla alkuoletus pätee
+    %On löydettävä sellaiset luvut $a$ ja $b$, joilla alkuoletus pätee
     ($a\in\N$ ja $b\notin\N$), mutta johtopäätös ei päde ($a+b\in\N$)
 
     Valitaan a=3 ja b=-2
     \begin{itemize}
       \item Tällöin $a=3$ on luonnollinen luku.
       \item Luku $b=-2$ ei ole luonnollinen luku.
-      \item a+b = 3 + (-2) = 1. Luku 1 on luonnollinen luku; siis a+b$\in\N$
+      \item a+b = 3 + (-2) = 1. Luku 1 on luonnollinen luku; siis $a+b\in\N$
     \end{itemize}
     Koska löysimme tapauksen, missä oletukset on voimassa mutta väite
     ei pidä paikkaansa, emme voi yleisesti sanoa $a+b$ ei ole
@@ -121,8 +121,7 @@
       \item Alkuperäisen oletuksen mukaan $a\in\N$.
       \item Vastaoletuksen mukaan $b\in\N$.
     \end{itemize}
-    Tehtävänannossa annetun perustiedon mukaan kahden luonnollisen luvun
-    summa on aina luonnollinen luku. Koska a ja b ovat molemmat
+    Koska a ja b ovat molemmat
     oletustemme mukaan luonnollisia lukuja, niiden summan a+b on siis
     pakko olla luonnollinen luku, eli $a+b\in\N$
 
@@ -220,11 +219,22 @@ Koska perusaskel on tosi ja induktioaskel on osoitettu paikkansapitäväksi, vä
   \item % b
   Todista, että $(A\cap B)\times(C\cap D)=(A\times C)\cap(B\times D)$
 
-  ...
-\end{kohta}
-
-
-
+  \medskip
+Olkoon $x,y$ mielivaltaisia
+\[
+\begin{aligned}
+(x,y)\in(A\cap B)\times(C\cap D)
+&\iff x\in A\cap B \ \land\ y\in C\cap D\\
+&\iff (x\in A\land x\in B)\ \land\ (y\in C\land y\in D)\\
+&\iff (x\in A\land y\in C)\ \land\ (x\in B\land y\in D)\\
+&\iff (x,y)\in A\times C \ \land\ (x,y)\in B\times D\\
+&\iff (x,y)\in (A\times C)\cap(B\times D)
+\end{aligned}
+\]
+Koska tämä pätee kaikille $(x,y)$, saadaan
+\(
+(A\cap B)\times(C\cap D)=(A\times C)\cap(B\times D)
+\)
 
 \pagebreak
 
@@ -269,6 +279,27 @@ sallita kaarta solmusta itseensä.)\\
 
 
 \medskip\noindent
-\textbf{Todistus.}
-...
+\textbf{Todistus Todari I esimerkkien avulla.}\\
+
+$G=(V,E)$ suuntaamaton verkko, $|V|=n\ge 2$\\
+
+Jaetaan solmut asteen mukaan luokkiin $V_1,...,V_r$, missä $r$ on
+aste arvojen lukumäärä. \\
+Asteet $0$ ja $n-1$ eivät voi esiintyä samanaikaisesti \Rightarrow \, $r\le n-1$
+
+Valitaan nyt satunnaisesti yksi luokista; olkoon $J$
+satunnaisluku joukossa $\{1,...,r\}$ ja tarkastellaan 
+satunnaismuuttujaa $X=|V_J|$ (siis valitun luokan koko).
+Silloin odotusarvo luokan koolle
+\[
+E[X]=\frac1r \sum_{i=1}^r |V_i|
+\;=\; \frac{n}{r}
+\;\ge\; \frac{n}{\,n-1\,} \;>\; 1
+\]
+Koska $X$ saa vain kokonaislukuarvoja, $E[X]>1$
+merkitsee, että jollakin $i$ on $|V_i|\ge 2$;
+ts. vähintään kahdella solmulla on sama aste.
+
+\end{kohta}
+
 \end{document}
