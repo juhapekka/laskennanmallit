@@ -1,14 +1,121 @@
 \documentclass[12pt,a4paper]{article}
 \input{yhteiset-asetukset.tex}
 
-\title{MAT12003 Todennäköisyyslaskenta I — tentti}
+\newcommand{\set}[1]{\left\{\,#1\,\right\}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Pot}{{\cal P}}
+
+\newcommand{\rma}{\mathrm{a}}
+\newcommand{\rmb}{\mathrm{b}}
+\newcommand{\rmc}{\mathrm{c}}
+
+\title{TKT20005 Laskennan mallit Viikko2}
 \date{}
 
 \begin{document}
 
 \maketitle
 
-\exercise{1}
+\exercise{1 Perustermejä.}
+Selitä omin sanoin seuraavat termit: merkki, aakkosto, merkkijono, formaali kieli. Anna esimerkki merkistä, aakkostosta, merkkijonosta ja formaalista kielestä.
 
+\paragraph{Merkki} on symboli mikä on aakkoston alkio. Esimerkiksi 0, 1, HiiriVasen, tkt, mat.
+\paragraph{Aakkosto} on mikä tahansa äärellinen joukko. Esim. ASCII merkistö, {R, G, B, A}
+\paragraph{Merkkijono} Aakkoston jono, äärellinen jono symboleita, Esim. 00010 on aakkoston $\Sigma_1$ merkkijono.
+\paragraph{Formaali kieli} Formaali kieli A on sellainen sääntöjen joukko että sillä on tarkastaja V joka hyväksyy tai hylkää alkion.
+
+
+
+\exercise{2 Joukko-opin merkinnät I.}
+Kuvaile sanallisesti seuraavat joukot:
+\begin{kohta}
+\item $\set{2n+1\mid n\in\N}$ on parittomien luonnollisten lukujen joukko, esim 1, 3.
+\item $\set{ww^{\cal R}\mid w\in\set{0,1}^\ast}$, missä 0 ja 1 ovat merkkejä. On palindromien joukko missä joukon jäsenet on parillisen pituisia. 0110, 011110
+\item $\set{\rma^n\rmb^n\rmc^n\mid n\in\N}$, missä $\rma$, $\rmb$ ja $\rmc$ ovat merkkejä. On joukko missä on sama määrä a, b ja c merkkejä \epsilon, abc, aabbcc
+\item $\set{u\in\Sigma^\ast\mid
+\mbox{jollakin $v\in\Sigma^\ast$ pätee $uv=\mbox{\tt abrakadabra}$}}$,
+missä $\Sigma=\set{\mbox{\tt a},\ldots,\mbox{\tt z}}$. On alusta purkaen sanan abrakadabra loppuosat. abrakadabra, brakadabra, rakadabra
+\end{kohta}
+Anna lisäksi kustakin joukosta kaksi esimerkkiä joukkoon kuuluvista
+alkioista.
+
+
+
+
+\pagebreak
+\exercise{3 Joukko-opin merkinnät II.}
+Esitä tehtävän~2 tyylistä joukkomerkintää
+käyttäen seuraavat joukot:
+\begin{kohta}
+\item
+aakkoston $\set{\mathrm{a},\mathrm{b},\mathrm{c},\mathrm{d}}$
+palindromit
+(merkkijonot, jotka ovat samoja myös lopusta alkuun luettuina.)\\
+
+$\set{w \in \set{a,b,c,d}^* | w = w^R } $
+\item
+kolmella jaolliset luonnolliset luvut\\
+
+$\set{w \in \mathbb{N} | w\, mod 3 = 0 } $
+\item
+aakkoston $\set{0,1}$ merkkijonot, joissa kaikki nollat ovat
+ennen ykkösiä\\
+
+$\set{{0^n 1^m}|n, m \in \N } $
+\item
+aakkoston $\set{\rma,\rmb}$ merkkijonot, jotka sisältävät
+osamerkkijonon $\mathrm{bab}$.\\
+
+$\set{wbabx \mid w, x \in \set{a, b}^*  } $\\
+
+bab, abab, baba, bbab, babb, aabab, ababa, ababb, babaa, babab
+
+
+\end{kohta}
+Luettele lisäksi (d)-kohdan kielen kymmenen ensimmäistä
+merkkijonoa lyhytaakkosjärjestyksessä (shortlex).
+
+
+
+
+\pagebreak
+\exercise{4 Äärellisen automaatin määritelmä ja sen tunnistama kieli.}
+Tässä tehtävässä harjoitellaan äärellisen automaatin tilakaavion piirtämistä ja tulkintaa.\\
+
+Olkoon $M=(\set{q_0,q_1,q_2},\set{0,1},\delta,q_0,\set{q_2})$,
+missä $\delta$ on seuraava:
+\begin{center}
+\begin{tabular}{c|cc}
+& 0 & 1\\\hline
+$q_0$ & $q_1$ & $q_0$\\
+$q_1$ & $q_2$ & $q_0$\\
+$q_2$ & $q_2$ & $q_2$
+\end{tabular}
+\end{center}
+\begin{kohta}
+\item Esitä automaatti $M$ tilakaaviona.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.8\textwidth]{viikko2tehtävä4.jpg}
+\end{figure}
+\item Luettele järjestyksessä tilat, joissa automaatti käy syötteellä 10101010 ja syötteellä 010011. Hyväksyykö vai hylkääkö automaatti syötteen?\\
+
+q0, q0, q1, q0, q1, q0, q1, q0, q1\\
+
+automaatti hylkää syötteen koska q1 ei ole sallittu tila.\\
+
+q0, q1, q0, q1, q2, q2, q2\\
+
+automaatti hyväksyy söytteen.
+
+\item Kuvaile sanallisesti automaatin tunnistama kieli.\\
+
+Eli miten q2 pääsee? Vaikuttaisi että q0->q1->q2 tarvitaan
+kaksi peräkkäistä nollaa. Eli automaatti tunnistaa syötteet missä on
+kaksi peräkkäistä nollaa.
+
+\end{kohta}
 
 \end{document}
