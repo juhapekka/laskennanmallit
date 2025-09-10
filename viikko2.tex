@@ -115,7 +115,80 @@ automaatti hyväksyy söytteen.
 Eli miten q2 pääsee? Vaikuttaisi että q0->q1->q2 tarvitaan
 kaksi peräkkäistä nollaa. Eli automaatti tunnistaa syötteet missä on
 kaksi peräkkäistä nollaa.
+\end{kohta}
+
+
+
+\pagebreak
+\exercise{5 Lisäharjoitusta äärellisen automaatin tunnistaman
+kielen kuvailuun.}
+
+\paragraph{Vasen automaatti} kuvaa kieltä joka alkaa a:lla
+ja päättyy a:han. Merkkijono vuorottelee merkkejä a,b,a,b,a.
+Merkkijonon pituus on pariton ja parittomissa paikoissa on a.
+
+Eli alkaa a:lla ja sitä seuraa nollasta ylöspäin kertaa ba.
+
+\paragraph{Oikea automaatti} kuvaa kieltä mikä sisältää nollasta
+ylöspäin kertaa 'ab' ja 'ba' merkkiyhdistelmiä.
+
+\bigbreak
+
+
+
+\pagebreak
+\exercise{6 Formaalit kielet.}
+Tässä tehtävässä opetellaan esittämään ja todistamaan argumentteja formaaleista kielistä.
+
+Kieli $A$ on {\em rajoitettu}, jos sen merkkijonojen pituudet ovat
+ylhäältä rajoitettuja, ts.\ jollain luonnollisella luvulla
+$n\in\N$ pätee, että $\abs{w}\leq n$ kaikilla $w\in A$.
+
+\begin{kohta}
+\item % 1) Unioni
+Pitääkö paikkansa, että kahden rajoitetun kielen $A$ ja $B$
+yhdiste $A\cup B$ on aina rajoitettu? Todista väite tai anna vastaesimerkki.\\
+
+Olkoon $A\subseteq \bigcup_{i=0}^{M}\Sigma^i$ ja $B\subseteq \bigcup_{i=0}^{N}\Sigma^i$\\
+
+Silloin (lausetta 1.1 seuraten)
+
+\[
+A\cup B \;\subseteq\; \bigcup_{i=0}^{\max\{M,N\}} \Sigma^i
+\]
+joten kaikilla $w\in A\cup B$ pätee $|w|\le \max\{M,N\}$. Siis $A\cup B$ on rajoitettu.
+
+
+
+\item % 2) Leikkaus
+Pitääkö paikkansa, että kahden rajoitetun kielen $A$ ja $B$ leikkaus $A\cap B$ on rajoitettu? Todista väite tai anna vastaesimerkki.\\
+
+Yllä määritellyillä M,N jos $w\in A\cap B$, niin $|w|\le M$ ja $|w|\le N$, joten
+$|w|\le \min\{M,N\}$\\
+
+Siis
+\[
+A\cap B \;\subseteq\; \bigcup_{i=0}^{\min\{M,N\}} \Sigma^i
+\]
+ja $A\cap B$ on rajoitettu
+
+
+
+\item % 3) Iff äärellinen
+Todista, että kieli on rajoitettu, jos ja vain jos se on
+äärellinen (ts.\ sisältää tasan $m$ merkkijonoa jollain
+luonnollisella luvulla $m\in\N$).\\
+
+Jos L on rajoitettu, niin on N siten, että $|w|\le N$ kaikilla $w\in L$ \\
+
+Silloin
+\[
+L \;\subseteq\; \Sigma^{\le N} \;:=\; \bigcup_{i=0}^{N}\Sigma^i
+\]
+Koska $\Sigma$ on äärellinen, jokainen $\Sigma^i$ on äärellinen ja äärellinen
+unioni äärellisiä joukkoja on äärellinen, joten $\Sigma^{\le N}$ ja siten $L$ on äärellinen.
 
 \end{kohta}
+
 
 \end{document}
