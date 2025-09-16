@@ -1,14 +1,121 @@
 \documentclass[12pt,a4paper]{article}
 \input{yhteiset-asetukset.tex}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
 
-\title{MAT12003 Todennäköisyyslaskenta I — tentti}
+\newcommand{\set}[1]{\left\{\,#1\,\right\}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Pot}{{\cal P}}
+
+\newcommand{\rma}{\mathrm{a}}
+\newcommand{\rmb}{\mathrm{b}}
+\newcommand{\rmc}{\mathrm{c}}
+
+\title{TKT20005 Laskennan mallit Viikko3}
 \date{}
 
 \begin{document}
 
 \maketitle
 
-\exercise{1}
+\exercise{1 Äärellisen automaatin muodostaminen.} Tässä tehtävässä harjoitellaan muodostamaan äärellinen automaatti annetulle kielelle.
+\begin{kohta}
+\item
+Piirrä deterministinen äärellinen automaatti, joka hyväksyy
+tasan ne aakkoston $\set{\mathrm{a},\mathrm{b},\mathrm{c}}$
+merkkijonot, jotka päättyvät cba.
+\begin{center}
+  \includegraphics[width=.6\textwidth]{viikko3tehtävä1a.jpg}
+\end{center}
 
+\item
+Piirrä deterministinen äärellinen automaatti, joka hyväksyy tasan ne 
+aakkoston $\set{\mathrm{a},\mathrm{b},\mathrm{c}}$ merkkijonot,
+jotka eivät sisällä osamerkkijonoa bc.\\
+\begin{center}
+  \includegraphics[width=.6\textwidth]{viikko3tehtävä1b.jpg}
+\end{center}
+
+\item
+Piirrä deterministinen äärellinen automaatti, joka hyväksyy tasan ne 
+aakkoston $\set{\mathrm{a},\mathrm{b},\mathrm{c}}$ merkkijonot,
+joissa jokainen paritonnumeroinen merkki on b.
+\begin{center}
+  \includegraphics[width=.6\textwidth]{viikko3tehtävä1c.jpg}
+\end{center}
+Automaatti seuraa ollaanko lukemassa paritonta vai parillista merkkiä jonossa.
+
+\item
+Piirrä deterministinen äärellinen automaatti, joka hyväksyy tasan ne 
+aakkoston $\set{\mathrm{a},\mathrm{b},\mathrm{c}}$ merkkijonot,
+joissa a- ja b-merkkien lukumäärien erotus on
+pariton.
+\begin{center}
+  \includegraphics[width=.6\textwidth]{viikko3tehtävä1d.jpg}
+\end{center}
+'c' lukumäärä ei vaikuta. $|N_a - N_b|$ on pariton jos summa $N_a + N_b$
+on pariton. Voidaan siis seurata a- ja b-merkkien yhteismäärän pariteettia.
+
+\end{kohta}
+
+
+
+
+
+
+
+
+\pagebreak
+\exercise{2. Muunnos epädeterministisestä automaatista deterministiseksi.}
+
+\begin{alakohta}
+\item \textbf{NFA $\to$ DFA}
+
+DFA alku on $\{1\}$. Hyväksyviä ovat osajoukot missä on $4$
+
+\medskip
+\noindent Siirtymätaulukko:
+\[
+\begin{array}{c|cc}
+\text{\sigma} & a & b \\\hline
+\{1\}   & \{2,4\} & \{2,4\} \\
+\{2,4\} & \varnothing & \{1,3\} \\
+\{1,3\} & \{2,4\} & \{2,4\} \\
+\varnothing & \varnothing & \varnothing
+\end{array}
+\]
+
+
+Hyväksyvä: $\{2,4\}$. Alkutila: $\{1\}$.
+
+\begin{center}
+  \includegraphics[width=.5\textwidth]{viikko3tehtävä21.jpg}
+\end{center}
+
+
+\item \textbf{Voiko DFA:ta yksinkertaistaa?} \\
+Kyllä. \{1\} ja \{1,3\} kummastakin a ja b vievät aina samaan
+tilaan \{2,4\}, ja kumpikaan ei ole hyväksyvä
+jolloin ne voidaan yhdistää.
+
+\medskip
+\noindent Minimoitu siirtymätaulukko
+\[
+\begin{array}{c|cc}
+\text{\sigma} & a & b \\\hline
+S\ (\{1\}\!=\!\{1,3\}) & T & T \\
+T\ (\{2,4\}) & D & S \\
+D\ (\varnothing) & D & D
+\end{array}
+\]
+Alku S (ei-hyväksyvä), hyväksyvä T, D on ikiluuppi.
+
+\begin{center}
+  \includegraphics[width=.5\textwidth]{viikko3tehtävä22.jpg}
+\end{center}
+
+\end{alakohta}
 
 \end{document}
