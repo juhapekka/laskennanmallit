@@ -2,6 +2,7 @@
 \input{yhteiset-asetukset.tex}
 \usepackage{tikz}
 \usetikzlibrary{automata, positioning, arrows}
+\usepackage{amssymb,amsmath,graphicx,color}
 
 \newcommand{\set}[1]{\left\{\,#1\,\right\}}
 \newcommand{\abs}[1]{\lvert#1\rvert}
@@ -118,4 +119,212 @@ Alku S (ei-hyväksyvä), hyväksyvä T, D on ikiluuppi.
 
 \end{alakohta}
 
+
+
+
+
+
+\pagebreak
+\exercise{3. Säännöllisten kielten sulkeumat.}
+
+Mitkä seuraavista väitteistä pitävät paikkansa?
+Perustele vastauksesi todistamalla väite tai antamalla vastaesimerkki.
+Perusteluissa voit pitää tunnettuina kurssilla tähän asti
+esitetyt tulokset sekä sen, että esim.\ kieli $C=\set{0^n1^n\mid n\in\N}$
+ei ole säännöllinen.
+\begin{kohta}
+\item
+Jos $A$ on säännöllinen ja $B$ on säännöllinen, niin
+$A\cup B$ on säännöllinen.\\
+
+Pitää painkansa. \\
+Jos $A$ ja $B$ ovat säännöllisiä, on olemassa DFA:t $M_A$ ja $M_B$.
+Automaatti M tiloilla $Q_A\times Q_B$ tunnistaa $A\cup B$ (hyväksyvät tilat
+$\{(p,q)\mid p\in F_A \text{ tai } q\in F_B\}$). Siis $A\cup B$ on säännöllinen
+
+\item %b
+Jos $A$ on säännöllinen ja $B$ ei ole säännöllinen, niin
+$A\cup B$ ei ole säännöllinen.\\
+
+Ei pidä paikkaansa.\\
+Vastaesimerkki: Olkoon $A=\Sigma^{\*}$ (säännöllinen, niin iso
+että $B\subseteq A$) ja $B=\{0^n1^n\mid n\in\mathbb{N}\}$
+(ei säännöllinen). Tällöin $A\cup B=\Sigma^{\*}$ on säännöllinen.\\
+\item %c
+Jos $A$ on säännöllinen ja $A\cup B$ ei ole säännöllinen,
+niin $B$ ei ole säännöllinen.\\
+
+Pitää paikkansa.\\
+Jos $A$ on säännöllinen ja $A\cup B$ ei ole säännöllinen,
+niin $B$ ei voi olla säännöllinen.\\
+
+\item %d
+Jos $A$ ei ole säännöllinen ja $B$ ei ole säännöllinen,
+niin $A\cap B$ ei ole säännöllinen.\\
+
+Ei pidä paikkaansa.\\
+Kaksi ei-säännöllistä voivat leikata säännölliseksi.
+Vastaesimerkki:
+\[
+A=\{0^n1^n\mid n\ge 0\},\qquad
+B=\{0^n1^{n+1}\mid n\ge 0\} \quad\mid \text{kummassakaan ei yhtään samaa sanaa}
+\]
+Molemmat ovat ei-säännöllisiä, mutta
+$A\cap B=\varnothing$ on säännöllinen.\\
+\item
+Jos $A$ on säännöllinen ja $B\subseteq A$, niin $B$ on
+säännöllinen.\\
+
+Ei pidä paikkaansa.\\
+Säännöllisen joukon alajoukko voi olla ei-säännöllinen.
+Vastaesimerkki: $A=\Sigma^{\*}$ on säännöllinen ja
+$B=\{0^n1^n\}\subseteq A$ ei ole säännöllinen
+
+\item
+Jos $B$ on säännöllinen ja $B\subseteq A$, niin $A$ on
+säännöllinen.\\
+
+Ei pidä paikkaansa\\
+Säännöllinen joukko ei pakota yläjoukkoa säännölliseksi.
+Vastaesimerkki: $B=\varnothing$ (säännöllinen) ja
+$A=\{0^n1^n\}$ (ei säännöllinen), jolloin
+$B\subseteq A$ mutta $A$ ei ole säännöllinen
+\end{kohta}
+
+
+
+
+
+
+
+\pagebreak
+\exercise{4. Yhdisteautomaatti.} Tämä tehtävä auttaa ymmärtämään luennoilla esitetyn yhdisteautomaatin konstruktion käymällä läpi yhden esimerkin yhdisteautomaatista.
+  
+Muodosta alla annettuista kahdesta äärellisestä automaatista
+deterministinen yhdisteautomaatti luennolla esitetyllä menetelmällä.
+Esitä yhdisteautomaatin laskenta syötteellä 0110.
+\begin{center}
+\begin{tikzpicture}[node distance=2.5cm, scale=2.0]
+\tikzstyle{state}=[circle,fill=none,draw,minimum size=0.7cm]
+\node (start) at (-0.7,0) {};
+\node[state] (a) at (0,0) {a};
+\node[state,double] (c) [below right of =a] {c};
+\node[state] (b) [above right of =c] {b};
+\path[-{>[]}]
+(start) edge (a)
+(a) edge [bend left = 30] node [above] {0,1} (b)
+(b) edge node [right] {0} (c)
+(b) edge [bend left = 30] node [above] {1} (a)
+(c) edge node [below] {0} (a)
+(c) edge [loop below] node [below] {1} (c)
+;
+\tikzstyle{state}=[circle,fill=none,draw,minimum size=0.7cm]
+\node (start) at (2.3,0) {};
+\node[state] (A) at (3,0) {A};
+\node[state] (C) [below right of =A] {C};
+\node[state,double] (B) [above right of =C] {B};
+\path[-{>[]}]
+(start) edge (A)
+(A) edge node [above] {0} (B)
+(A) edge [bend left = 30] node [right] {1} (C)
+(B) edge [bend left = 30] node [right] {0} (C)
+(B) edge [loop right] node [right] {1} (B)
+(C) edge [bend left = 30] node [left] {0} (B)
+(C) edge [bend left = 30] node [below] {1} (A)
+;
+\end{tikzpicture}
+\end{center}
+\medskip
+Tehdään yhdisteautomaatti. (LaMa luentomateriaali s.54 alkavaan esimerkkiä mukaillen)\\
+
+Vasemman automaatin tilat
+$\{a,b,c\}$ (alku $a$, hyväksyvä $c$) ja oikean 
+$\{A,B,C\}$ (alku $A$, hyväksyvä $B$)\\
+
+DFA:
+\[
+M=(Q,\Sigma,\delta,(a,A),F)\qquad
+Q=\{a,b,c\}\times\{A,B,C\}\ \ \Sigma=\{0,1\}
+\]
+\[
+\delta\big((p,q),x\big)=(\delta_1(p,x),\delta_2(q,x))\qquad
+F=\big(\{c\}\times\{A,B,C\}\big)\ \cup\ \big(\{a,b,c\}\times\{B\}\big)
+\]
+Eli $(p,q)$ on hyväksyvä, jos jompikumpi komponenteista olisi hyväksyvä
+alkuperäisessä automaatissa.
+(s.60 LaMa "Tila on hyväksyvä, jos se vastaa ainakin toisen
+alkuperäisen automaatin hyväksyvää tilaa")
+
+\bigskip
+Saavutettavat tilat ja siirtymät (keltainen = hyväksyvä):
+
+\[
+\renewcommand{\arraystretch}{1.15}
+\begin{array}{c|cc}
+\text{tila} & 0 & 1\\\hline
+(a,A)            & \korostus{(b,B)} & (b,C) \\
+\korostus{(b,B)} & \korostus{(c,C)} & \korostus{(a,B)} \\
+(b,C)            & \korostus{(c,B)} & (a,A) \\
+\korostus{(a,B)} & (b,C)            & \korostus{(b,B)} \\
+\korostus{(c,C)} & \korostus{(a,B)} & \korostus{(c,A)} \\
+\korostus{(c,B)} & (a,C)            & \korostus{(c,B)} \\
+\korostus{(c,A)} & \korostus{(a,B)} & \korostus{(c,C)} \\
+(a,C)            & \korostus{(b,B)} & (b,A) \\
+(b,A)            & \korostus{(c,B)} & (a,C)
+\end{array}
+\]
+
+
+\medskip
+tarkistetaan syötteellä 0110:
+\[
+(a,A)\xrightarrow{0}\korostus{(b,B)}
+\xrightarrow{1}\korostus{(a,B)}
+\xrightarrow{1}\korostus{(b,B)}
+\xrightarrow{0}\korostus{(c,C)}
+\]
+Lopputila on hyväksyvä, joten sana \(\mathbf{0110}\) hyväksytään. 
+
+
+
+
+
+\pagebreak
+\exercise{5. Kielen osoittaminen säännölliseksi I.} Tässä tehtävässä syvennetään ymmärrystä kielen osoittamisesta säännölliseksi muodostamalla sopiva automaatti.
+  
+Oletetaan, että kielet $A$ ja $B$ ovat säännöllisiä.
+Osoita, että leikkaus $A\cap B$ on säännöllinen, muuntamalla
+sopivasti luennolla esitettyä todistusta sille, että
+yhdiste $A\cup B$ on säännöllinen (lause 1.1, Sipserin Theorem 1.25).
+
+\bigskip
+Muodostamme äärellisen automaatin; (OR \rightarrow \, AND):\\
+$M_1=(Q_1,\Sigma,\delta_1,q_1,F_1)$ ja
+$M_2=(Q_2,\Sigma,\delta_2,q_2,F_2)$\\
+
+DFA:t, joille $L(M_1)=A$ ja $L(M_2)=B$\\
+
+DFA:
+\[
+M=(Q,\Sigma,\delta,(q_1,q_2),F),\quad
+Q=Q_1\times Q_2,\quad
+\delta\big((p,q),a\big)=(\delta_1(p,a),\,\delta_2(q,a)),\quad
+F=F_1\times F_2
+\]
+
+Olkoon $w\in\Sigma^*$ mielivaltainen syöte, $w=a_1a_2\cdots a_k$\\
+
+tilajonot:
+\[
+p_0=q_1,\;\; p_{i+1}=\delta_1(p_i,a_i)
+\quad\text{ja}\quad
+r_0=q_2,\;\; r_{i+1}=\delta_2(r_i,a_i)
+\]
+Siten lopussa $M$ on tilassa $(p_k,r_k)$ ja
+\[
+w\in L(M) \iff (p_k,r_k)\in F_1\times F_2
+\iff p_k\in F_1 \;\land\; r_k\in F_2
+\iff w\in A \;\land\; w\in B
+\]
+Siis $L(M)=A\cap B$, joten $A\cap B$ on säännöllinen.\\
 \end{document}
