@@ -1,14 +1,212 @@
 \documentclass[12pt,a4paper]{article}
 \input{yhteiset-asetukset.tex}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta}
+\usepackage{amssymb,amsmath,graphicx,color}
 
-\title{MAT12003 Todennäköisyyslaskenta I — tentti}
+\newcommand{\set}[1]{\left\{\,#1\,\right\}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Pot}{{\cal P}}
+
+\newcommand{\rma}{\mathrm{a}}
+\newcommand{\rmb}{\mathrm{b}}
+\newcommand{\rmc}{\mathrm{c}}
+
+\title{TKT20005 Laskennan mallit Viikko4}
 \date{}
 
 \begin{document}
 
 \maketitle
 
-\exercise{1}
+\exercise{1 Säännöllisten lausekkeiden muodostaminen.}
+Esitä säännöllinen lauseke seuraaville aakkoston
+$\Sigma=\set{\rma,\rmb,\rmc}$ kielille:
+\begin{kohta}
+\item merkkijonot, joissa joka toinen merkki on b (joka toinen merkki tarkoittaa tässä merkkejä numero 2, 4, 6 jne., mikäli merkkijonossa on ainakin niin monta merkkiä)
+\[
+\big((\mathrm{a}\mid\mathrm{b}\mid\mathrm{c})\,\mathrm{b}\big)^{*}\,(\,\varepsilon\mid\mathrm{a}\mid\mathrm{b}\mid\mathrm{c}\,)
+\] 
+\item merkkijonot, joissa on pariton määrä c-merkkejä
+\[
+(\mathrm{a}\mid\mathrm{b})^{*}\ \mathrm{c}\ \big((\mathrm{a}\mid\mathrm{b})^{*}\ \mathrm{c}\ (\mathrm{a}\mid\mathrm{b})^{*}\ \mathrm{c}\big)^{*}\ (\mathrm{a}\mid\mathrm{b})^{*}
+\]
+\item merkkijonot, joissa on korkeintaan yhtä merkkiä
+\[
+\varepsilon \ \mid\ \mathrm{a}\ \mid\ \mathrm{b}\ \mid\ \mathrm{c}
+\]
+\item merkkijonot, joissa on ainakin kahta eri merkkiä
+\[
+(\mathrm{a}\mid\mathrm{b}\mid\mathrm{c})^{*}\,(\ \mathrm{ab}\mid\mathrm{ba}\mid\mathrm{ac}\mid\mathrm{ca}\mid\mathrm{bc}\mid\mathrm{cb}\ )\,(\mathrm{a}\mid\mathrm{b}\mid\mathrm{c})^{*}
+\]
+\item merkkijonot, jotka sisältävät osamerkkijonon abc
+\[
+(\mathrm{a}\mid\mathrm{b}\mid\mathrm{c})^{*}\ \mathrm{abc}\ (\mathrm{a}\mid\mathrm{b}\mid\mathrm{c})^{*}
+\]
+\item merkkijonot, jotka eivät sisällä osamerkkijonoa abc.
+\[
+\Big( (\mathrm{b}\mid\mathrm{c})^{*}\,\big(\ \mathrm{a}(\mathrm{a}\mid\mathrm{c})\ \mid\ \mathrm{ab}(\mathrm{a}\mid\mathrm{b})\ \big) \Big)^{*}\,
+(\mathrm{b}\mid\mathrm{c})^{*}\,(\varepsilon\mid \mathrm{a})
+\]
+\end{kohta}
+
+
+
+
+
+
+\pagebreak
+\exercise{2 Muunnos säännöllisestä lausekkeesta äärelliseksi automaatiksi.}
+Kieli $L=(0\cup 01)^{*}\subseteq\{0,1\}^*$ koostuu sanoista, joissa jokainen $1$ on heti
+edeltävän $0$:n perässä (ei aloiteta $1$:llä, ei kahta peräkkäistä $1$:tä).
+
+\begin{kohta}
+\item DFA
+
+\begin{center}
+  \includegraphics[width=.4\textwidth]{viikko4tehtävä2_1.jpg}
+\end{center}
+\begin{comment}
+    
+\begin{center}
+\begin{tikzpicture}[
+  node distance=28mm,
+  every node/.style={circle,draw,minimum size=8mm,inner sep=0pt}
+]
+\node (q0) [double] {$q_0$};                 % start, accept (ε)
+\node (q1) [right=of q0, double] {$q_1$};     % just read 0 (still accept)
+\node (qd) [below=18mm of q1] {$q_\times$};   % sink
+
+\draw[->] (-1.2,0) -- (q0);
+
+\draw[->] (q0) -- node[above] {0} (q1);
+\draw[->] (q0) -- node[left]  {1} (qd);
+
+\draw[->] (q1) edge[loop above] node {0} (q1);
+\draw[->] (q1) -- node[above] {1} (q0);
+
+\draw[->] (qd) edge[loop right] node {0,1} (qd);
+\end{tikzpicture}
+\end{center}
+\end{comment}
+
+\smallskip
+Tää DFA hyväksyy $L$:n: $q_0$ ja $q_1$ ovat hyväksyviä (tyhjä sana ja
+kaikki tähän asti validit päätökset), $1$ alussa tai $1$ ilman edeltävää $0$:aa
+vie virheeseen
+
+\item \emph{NFA lausekkeesta \((0\cup 01)^*\) luentomenetelmällä.}
+(Käytetään $\varepsilon$-siirtymiä: tähti palaa alkuun, yhdiste haaroittaa.)
+
+\begin{center}
+  \includegraphics[width=.4\textwidth]{viikko4tehtävä2_2.jpg}
+\end{center}
+\begin{comment}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=22mm,
+  every node/.style={circle,draw,minimum size=8mm,inner sep=0pt}
+]
+\node (s)  [double] {$s$};       % start & accept (Kleene *)
+\node (x)  [below left=12mm and 14mm of s] {$x$}; % branch for '0'
+\node (y)  [below right=12mm and 14mm of s] {$y$}; % branch for '01'
+\node (z)  [right=18mm of y] {$z$};
+
+\draw[->] (-1.2,0) -- (s);
+
+% epsilon branches for union
+\draw[->] (s) edge[bend left=18] node[left] {$\varepsilon$} (x);
+\draw[->] (s) edge[bend left=18] node[right] {$\varepsilon$} (y);
+
+% '0' branch: x --0--> s
+\draw[->] (x) -- node[below] {0} (s);
+
+% '01' branch: y --0--> z --1--> s
+\draw[->] (y) -- node[below] {0} (z);
+\draw[->] (z) -- node[below] {1} (s);
+\end{tikzpicture}
+\end{center}
+\end{comment}
+\pagebreak
+
+\item DFA NFA:sta 
+$\varepsilon$-sulut: $(s)=\{s,x,y\}$, muilla ei $\varepsilon$-siirtymiä.
+Saavutettavat osajoukot ja siirtymät (hyväksyvä jos joukossa on $s$):
+
+\[
+\renewcommand{\arraystretch}{1.15}
+\begin{array}{c|cc}
+\text{DFA-tila} & 0 & 1\\\hline
+\{s,x,y\}^\star     & \{s,x,y,z\}^\star & \varnothing \\
+\{s,x,y,z\}^\star   & \{s,x,y,z\}^\star & \{s,x,y\}^\star \\
+\varnothing         & \varnothing       & \varnothing
+\end{array}
+\]
+
+\noindent Tästä saadaan DFA (isomorfinen edellä olevaan pieneen DFA:han):
+
+\begin{center}
+  \includegraphics[width=.4\textwidth]{viikko4tehtävä2_3.jpg}
+\end{center}
+\begin{comment}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=28mm,
+  every node/.style={circle,draw,minimum size=8mm,inner sep=0pt}
+]
+\node (A) [double] {$\{s,x,y\}$};
+\node (B) [right=of A, double] {$\{s,x,y,z\}$};
+\node (D) [below=18mm of B] {$\varnothing$};
+
+\draw[->] (-1.6,0) -- (A);
+
+\draw[->] (A) -- node[above] {0} (B);
+\draw[->] (A) -- node[left]  {1} (D);
+
+\draw[->] (B) edge[loop above] node {0} (B);
+\draw[->] (B) -- node[above] {1} (A);
+
+\draw[->] (D) edge[loop right] node {0,1} (D);
+\end{tikzpicture}
+\end{center}
+\end{comment}
+
+\item \emph{Vertailu.}
+saatu DFA on sama kuin tehty pieni DFA
+tilojen uudelleennimeämistä vaille:
+\[
+\{s,x,y\}\leftrightarrow q_0,\qquad
+\{s,x,y,z\}\leftrightarrow q_1,\qquad
+\varnothing\leftrightarrow q_\times.
+\]
+Molemmissa on kaksi hyväksyvää tilaa ja virhe, siirtymät:
+$0$: $q_0\!\to\!q_1$, $q_1\!\to\!q_1$; \quad
+$1$: $q_0\!\to\!q_\times$, $q_1\!\to\!q_0$.
+\end{kohta}
+
+
+
+
+
+
+\pagebreak
+\exercise{3 Yhteydettömän kieliopin muodostaminen.}
+Esitä yhteydettömät kieliopit, jotka tuottavat seuraavat
+aakkoston $\Sigma=\set{0,1}$ kielet:
+\begin{enumerate}
+\item
+parittoman mittaiset merkkijonot
+\item merkkijonot, joissa on osamerkkijono 111
+\item
+merkkijonot, joissa on ainakin kaksi merkkiä ja joiden
+ensimmäinen ja viimeinen merkki ovat samat
+\item $\set{0^n1^m\mid\mbox{$m,n\in\N$ ja $m\geq n$}}$
+\item $\set{0^n1^k0^m\mid\mbox{$m,n,k\in\N$ ja $k=n+m$}}$
+\end{enumerate}
 
 
 \end{document}
