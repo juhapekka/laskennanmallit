@@ -3,6 +3,7 @@
 \usepackage{tikz}
 \usetikzlibrary{automata, positioning, arrows.meta}
 \usepackage{amssymb,amsmath,graphicx,color}
+\usepackage{forest}
 
 \newcommand{\set}[1]{\left\{\,#1\,\right\}}
 \newcommand{\abs}[1]{\lvert#1\rvert}
@@ -103,33 +104,8 @@ vie virheeseen
 \begin{center}
   \includegraphics[width=.4\textwidth]{viikko4tehtävä2_2.jpg}
 \end{center}
-\begin{comment}
 
-\begin{center}
-\begin{tikzpicture}[
-  node distance=22mm,
-  every node/.style={circle,draw,minimum size=8mm,inner sep=0pt}
-]
-\node (s)  [double] {$s$};       % start & accept (Kleene *)
-\node (x)  [below left=12mm and 14mm of s] {$x$}; % branch for '0'
-\node (y)  [below right=12mm and 14mm of s] {$y$}; % branch for '01'
-\node (z)  [right=18mm of y] {$z$};
 
-\draw[->] (-1.2,0) -- (s);
-
-% epsilon branches for union
-\draw[->] (s) edge[bend left=18] node[left] {$\varepsilon$} (x);
-\draw[->] (s) edge[bend left=18] node[right] {$\varepsilon$} (y);
-
-% '0' branch: x --0--> s
-\draw[->] (x) -- node[below] {0} (s);
-
-% '01' branch: y --0--> z --1--> s
-\draw[->] (y) -- node[below] {0} (z);
-\draw[->] (z) -- node[below] {1} (s);
-\end{tikzpicture}
-\end{center}
-\end{comment}
 \pagebreak
 
 \item DFA NFA:sta 
@@ -151,33 +127,10 @@ Saavutettavat osajoukot ja siirtymät (hyväksyvä jos joukossa on $s$):
 \begin{center}
   \includegraphics[width=.4\textwidth]{viikko4tehtävä2_3.jpg}
 \end{center}
-\begin{comment}
 
-\begin{center}
-\begin{tikzpicture}[
-  node distance=28mm,
-  every node/.style={circle,draw,minimum size=8mm,inner sep=0pt}
-]
-\node (A) [double] {$\{s,x,y\}$};
-\node (B) [right=of A, double] {$\{s,x,y,z\}$};
-\node (D) [below=18mm of B] {$\varnothing$};
 
-\draw[->] (-1.6,0) -- (A);
 
-\draw[->] (A) -- node[above] {0} (B);
-\draw[->] (A) -- node[left]  {1} (D);
-
-\draw[->] (B) edge[loop above] node {0} (B);
-\draw[->] (B) -- node[above] {1} (A);
-
-\draw[->] (D) edge[loop right] node {0,1} (D);
-\end{tikzpicture}
-\end{center}
-\end{comment}
-
-\item \emph{Vertailu.}
-saatu DFA on sama kuin tehty pieni DFA
-tilojen uudelleennimeämistä vaille:
+\item Vertailu. DFA on sama kuin tehty pieni DFA:
 \[
 \{s,x,y\}\leftrightarrow q_0,\qquad
 \{s,x,y,z\}\leftrightarrow q_1,\qquad
@@ -197,16 +150,109 @@ $1$: $q_0\!\to\!q_\times$, $q_1\!\to\!q_0$.
 \exercise{3 Yhteydettömän kieliopin muodostaminen.}
 Esitä yhteydettömät kieliopit, jotka tuottavat seuraavat
 aakkoston $\Sigma=\set{0,1}$ kielet:
-\begin{enumerate}
+\begin{kohta}
 \item
 parittoman mittaiset merkkijonot
+\[
+S \to 0 \mid 1 \mid 0S0 \mid 0S1 \mid 1S0 \mid 1S1
+\]
+
 \item merkkijonot, joissa on osamerkkijono 111
+\[
+S \to X\,111\,Y,\qquad
+X \to 0X \mid 1X \mid \varepsilon,\qquad
+Y \to 0Y \mid 1Y \mid \varepsilon
+\]
 \item
 merkkijonot, joissa on ainakin kaksi merkkiä ja joiden
 ensimmäinen ja viimeinen merkki ovat samat
+\[
+S \to 0T0 \mid 1T1,\qquad
+T \to 0T \mid 1T \mid \varepsilon
+\]
+
 \item $\set{0^n1^m\mid\mbox{$m,n\in\N$ ja $m\geq n$}}$
+\[
+S \to 0S1 \mid T,\qquad
+T \to 1T \mid \varepsilon
+\]
+
 \item $\set{0^n1^k0^m\mid\mbox{$m,n,k\in\N$ ja $k=n+m$}}$
-\end{enumerate}
+\[
+S \to 0S1 \mid U,\qquad
+U \to 1U0 \mid \varepsilon
+\]
+
+\end{kohta}
+
+
+
+
+
+
+\pagebreak
+\exercise{4 Yhteydetön kielioppi, jäsennyspuu ja johto.}
+  
+Tarkastellaan yhteydetöntä kielioppia
+\begin{eqnarray*}
+S&\rightarrow& SAB\mid\varepsilon\\
+A&\rightarrow& \mathrm{a}A\mid\mathrm{a}\\
+B&\rightarrow& \mathrm{b}B\mid\varepsilon
+\end{eqnarray*}
+Esitä merkkijonolle $\mathrm{aa}$ kaksi erilaista
+jäsennyspuuta ja kummallekin sitä vastaava johto.
+
+\bigskip
+
+\begin{alakohta}
+\item versio 1 (yksi $A$ tuottaa kaksi a:ta):
+
+\begin{forest}
+for tree={align=center, parent anchor=south, child anchor=north, l sep=8pt, s sep=6pt}
+[S
+  [S [\(\varepsilon\)]]
+  [A
+    [\(\mathrm{a}\)]
+    [A [\(\mathrm{a}\)]]
+  ]
+  [B [\(\varepsilon\)]]
+]
+\end{forest}
+
+\[
+\begin{aligned}
+S &\Rightarrow S A B \Rightarrow \varepsilon A B
+   \Rightarrow \mathrm{a}A\,B \Rightarrow \mathrm{a}\mathrm{a}\,B
+   \Rightarrow \mathrm{a}\mathrm{a}\,\varepsilon \;=\; \mathrm{aa}
+\end{aligned}
+\]
+
+\item versio 2 (kaksi $A$-lohkoa, kumpikin tuottaa yhden a:n)
+
+\begin{forest}
+for tree={align=center, parent anchor=south, child anchor=north, l sep=8pt, s sep=6pt}
+[S
+  [S
+    [S [\(\varepsilon\)]]
+    [A [\(\mathrm{a}\)]]
+    [B [\(\varepsilon\)]]
+  ]
+  [A [\(\mathrm{a}\)]]
+  [B [\(\varepsilon\)]]
+]
+\end{forest}
+
+\[
+\begin{aligned}
+S &\Rightarrow S A B \Rightarrow S A B\, A B
+   \Rightarrow \varepsilon A B\, A B
+   \Rightarrow \mathrm{a} B\, A B \Rightarrow \mathrm{a}\varepsilon\, A B \\
+  &\Rightarrow \mathrm{a} A B \Rightarrow \mathrm{a}\mathrm{a} B
+   \Rightarrow \mathrm{a}\mathrm{a}\varepsilon \;=\; \mathrm{aa}
+\end{aligned}
+\]
+\end{alakohta}
+
 
 
 \end{document}
