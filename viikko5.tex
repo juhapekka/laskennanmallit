@@ -1,14 +1,264 @@
 \documentclass[12pt,a4paper]{article}
 \input{yhteiset-asetukset.tex}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta}
+\usepackage{amssymb,amsmath,graphicx,color}
+\usepackage{forest}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{amsthm}
+\newtheorem{lause}{Lause}
+\renewcommand{\proofname}{Todistus}
+\renewcommand{\qedsymbol}{$\blacksquare$}
 
-\title{MAT12003 Todennäköisyyslaskenta I — tentti}
+\newcommand{\set}[1]{\left\{\,#1\,\right\}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Pot}{{\cal P}}
+
+\newcommand{\rma}{\mathrm{a}}
+\newcommand{\rmb}{\mathrm{b}}
+\newcommand{\rmc}{\mathrm{c}}
+\newcommand{\code}[1]{\left\langle\,#1\,\right\rangle}
+
+
+\title{TKT20005 Laskennan mallit Viikko5}
 \date{}
 
 \begin{document}
 
 \maketitle
 
-\exercise{1}
+\exercise{1. Turingin kone.} Tässä tehtävässä harjoitellaan lukemaan Turingin koneen tilakaaviota.
+  
+Esitä allaolevan Turingin koneen laskenta syötteellä 0111
+luettelemalla laskennan aikana syntyvät tilanteet, kuten
+luentomateriaalin sivulla~181 (tai Sipserin sivun~172 alaosassa).
+\bigskip
+
+\begin{tabular}{rrrrrrrrr} \toprule
+$q_0 0111$&  \vdash &  \korostus{q0} 0 &               1    &               1 &               1 & &\\
+&  \vdash &               a & \korostus{q1} 1    &               1 &               1 & &\\
+&  \vdash &               a &               1    &               1 &               1 & \korostus{q1} &\\
+&  \vdash &               a &               1    &               1 & \korostus{q2} 1 & &\\
+&  \vdash &               a & \korostus{q3} 1    &               1 &               B & &\\
+&  \vdash & \korostus{q4} a &               1    &               1 &               B & &\\
+&  \vdash &               a & \korostus{q0} 1    &               1 &               B & &\\
+&  \vdash &               a &               b    &               1 & \korostus{q1} B & &\\
+&  \vdash &               a &               b    & \korostus{q2} 1 &               B & &\\
+&  \vdash &               a & \korostus{q3} b    &               B &               B & &\\
+&  \vdash &               a &               b    & \korostus{q5} B &               B & &\\
+&  \vdash &               a &               b    &               B &               B & \korostus{q5} &\\
+&  \vdash &               a &               b    &               B & \korostus{q6} B & &\\
+&  \vdash &               a &               b    & \korostus{q9} B &               X & &\\
+&  \vdash &               a & \korostus{q9} b    &               B &               X & &\\
+&  \vdash &               a &               X    & \korostus{q10}B &               X & & \\
+&  \vdash &               a &               X    &               B &               X & \korostus{q10} & \rightarrow \, $q_{acc}$\\
+\bottomrule
+\end{tabular}
+
+
+
+
+
+\pagebreak
+\exercise{2. Laskentaongelman ratkaisu Turingin koneella.}
+Turingin konetta voi luonnollisella tavalla käyttää paitsi kielen
+tunnistamiseen myös funktion laskemiseen.
+Määritellään, että Turingin kone laskee funktion
+$f\colon\Sigma^\ast\rightarrow\Sigma^\ast$, jos millä
+tahansa syötemerkkijonolla $w$ se pysähtyy tilanteeseen, jossa
+nauhalla on alussa merkkijono $f(w)$ ja sen jälkeen pelkkiä
+tyhjämerkkejä.
+
+Tarkastelemme seuraavassa binäärikoodattujen luonnollisten lukujen
+käsittelemistä Turingin koneella.
+Kun $n\in\N$ on luonnollinen luku, käytämme merkintää
+$\code{n}$ tarkoittamaan luvun $n$ binääriesitystä
+(aakkoston $\Sigma=\set{0,1}$ merkkijonona) ilman
+turhia etunollia.
+Esim.\ $\code{12}=1100$.
+
+Määritellään lukujen binääriesityksille edeltäjäfunktio
+$p$ niin, että jos $w=\code{n+1}$ jollain $n\in\N$, niin
+$p(w)=\code{n}$.
+Jos $w$ ei ole muotoa $\code{n+1}$ (eli $w=\varepsilon$
+tai $w=\code{0}$ tai $w$:ssä
+on ylimääräisiä etunollia), määritellään
+$p(w)=\varepsilon$.
+
+Kuvaile yksinauhainen Turingin kone, joka laskee funktion $p$.
+Sopiva tarkkuus esitykselle on suunnilleen vastaava kuin
+luentomateriaalin sivulla~186.
+Toisin sanoen selitä, miten nauhaa käytetään ja muut mahdolliset
+korkean tason periaatteet, mutta älä mene yksittäisten tilojen ja
+tilasiirtymien tasolle.\\
+\newline
+
+
+
+
+
+
+\medskip
+Kone toimii kolmessa vaiheessa:
+
+\medskip
+\begin{alakohta}
+
+\item{\bf Kelpoisuustesti ja tyhjätapaukset:}
+\begin{itemize}
+  \item Jos ensimmäinen solu on tyhjä (eli $w=\varepsilon$): pysähdy koska nauha on valmiiksi tyhjä
+  \item Jos ensimmäinen merkki on $0$:
+    \begin{itemize}
+      \item Jos seuraava solu on tyhjä (eli $w=0$): pyyhi tuo $0$ ja pysähdy (tulos $\varepsilon$)
+      \item Muuten (pituus $\ge 2$ ja johtava $0$ eli ylimääräisiä etunollia): pyyhi koko syöte (korvaa kaikki 0/1:t tyhjällä) ja pysähdy, tulos $\varepsilon$
+    \end{itemize}
+  \item Muuten ensimmäinen merkki on $1$ (kelvollinen koodi $\mathrm{bin}(n{+}1)$): jatka vaiheeseen 2 
+\end{itemize}
+
+\item{\bf Vähennä yksi (binääri -1 oikealta):}\\
+Siirry syötteen loppuun (kulje oikealle kunnes tyhjö, sitten yksi vasemmalle)
+\begin{itemize}
+  \item Jos solu on $1$: kirjoita $0$ ja siirry vaiheeseen 3
+  \item Jos solu on $0$: toista, kunnes löydät $1$:n vasemmalta:
+    \begin{itemize}
+      \item jokaiselle peräkkäiselle $0$:lle: kirjoita $1$ ja siirry yhden askeleen vasemmalle;
+      \item ensimmäisen $1$:n kohdalla: kirjoita $0$ ja siirry vaiheeseen 3
+    \end{itemize}
+\end{itemize}
+Tässä vaiheessa nauhalla on $\mathrm{bin}(n)$, mutta
+tapauksessa $w=10^k$ vasemmalle jäi yksi johtava nolla
+
+\pagebreak
+\item{\bf Poista johtava nolla tarvittaessa:}\\
+Palaa vasempaan reunaan (kulje vasemmalle tyhjään, sitten yksi oikealle)
+\begin{itemize}
+  \item Jos vasemmanpuoleisin merkki on $1$: pysähdy.
+  \item Jos vasemmanpuoleisin merkki on $0$:
+    \begin{itemize}
+      \item jos seuraava solu on tyhjä (jäännös "0", tapaus $w=1$): pysähdy ja jätä "0" paikalleen
+      \item muuten (pituus $\ge 2$ ja johtava 0): poista vasemman laidan 0 siirtämällä sanaa yhden solun verran vasemmalle:
+        \begin{itemize}
+          \item kulje oikealle ja jokaisessa solussa kopioi sen sisältö edelliseen soluun (ylikirjoita); jatka kunnes kohtaat tyhjän;
+          \item mene yksi vasemmalle ja kirjoita tyhjä (tyhjää viimeinen kopio)
+          \item palaa vasempaan reunaan ja pysähdy
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\end{alakohta}
+
+\medskip
+\noindent{\bf testejä}
+\begin{itemize}
+  \item $w=\varepsilon \;\Rightarrow\; \varepsilon$ (Vaihe1)
+  \item $w=0 \;\Rightarrow\; \varepsilon$ (Vaihe 1)
+  \item $w=1 \;\Rightarrow\; 0$ (Vaihe 2 tuottaa ”0”; Vaihe 3 tunnistaa yksittäisen nollan)
+  \item $w=10 \;\Rightarrow\; 01 \stackrel{\text{V3}}{\Rightarrow} 1$
+  \item $w=101000 \;\Rightarrow\; 100111$ (3 ei poista mitään)
+\end{itemize}
+
+
+
+
+
+\pagebreak
+\exercise{3. Turing-tunnistettavuus.}Tässä tehtävässä tarkastellaan, mitä Turing-tunnistettavuus tarkoittaa, ja harjoitellaan, kuinka jokin kieli todistetaan Turing-tunnistettavaksi.
+
+    Tarkastellaan kieltä
+\[A=\set{\code{M,w,q}\mid
+\mbox{$M$ on Turingin kone, joka syötteellä $w$ menee ainakin kerran
+tilaan $q$}}.\]
+Todista, että kieli $A$ on Turing-tunnistettava.
+
+\bigskip
+
+
+    
+\begin{proof}
+Määritellään Turingin kone R
+
+\medskip
+\noindent Syöte: koodattu kolmikko $\langle M,w,q\rangle$
+
+\begin{enumerate}
+\item Tarkista, että $q$ on $M$:n tilajoukon koodaus. Jos ei ole hylkää
+\item Simuloi $M$:ää syötteellä $w$ askel askeleelta universaalilla simulaattorilla
+      Pidä kirjaa $M$:n nykyisestä tilasta.
+      \begin{itemize}
+        \item Jos simulaation jossain askeleessa $M$:n tila on $q$, hyväksy
+        \item Jos $M$ pysähtyy hyväksyen tai hyläten ennen kuin tila $q$ esiintyy, hylkää.
+        \item Muussa tapauksessa  $M$ jatkaa ikuisesti eikä koskaan vieraile $q$:ssa.
+      \end{itemize}
+\end{enumerate}
+
+\noindent  
+Jos $\langle M,w,q\rangle\in A$, niin simuloinnissa on jokin hetki,
+jolloin $M$:n tila on $q$, ja $R$ hyväksyy\\
+
+Jos $\langle M,w,q\rangle\notin A$, on kaksi tapausta: joko $M$ 
+pysähtyy koskaan vierailematta $q$:ssa (eli $R$ hylkää), 
+tai $M$ ei pysähdy eikä vieraile $q$:ssa, jolloin $R$ jatkaa 
+simulaatiota ikuisesti (ei hyväksy). Eli $R$ hyväksyy 
+täsmälleen $A$:n syötteet, joten $A$ on Turing-tunnistettava.
+\end{proof}
+
+
+
+
+
+\pagebreak
+\exercise{4. Turing-ratkeavuus.}
+Tässä tehtävässä tarkastellaan, mitä Turing-ratkeavuus tarkoittaa, ja harjoitellaan, kuinka jokin kieli todistetaan Turing-ratkeavaksi.\\
+
+Kieli $T$ koostuu kaikista sellaisista pareista $\code{M,w}$,
+joissa $M$ on Turingin kone, $w$ jokin sen syöte
+ja nämä toteuttavat ehdon, että koneen $M$ laskennassa
+syötteellä $w$ ainakin yksi tila toistuu ainakin kaksi kertaa.\\
+
+Todista, että kieli on ratkeava.\\
+
+\bigskip
+
+
+
+
+
+%Olkoon
+\[
+T=\{\langle M,w\rangle \mid \text{$M$:llä syötteellä $w$ jokin ohjaustila esiintyy vähintään kahdesti}\}
+\]
+\\
+
+
+$T$ on Turing-ratkeava \\
+
+\begin{proof}
+Rakennetaan päättävä kone $D$ syötteelle $\langle M,w\rangle$
+
+Laske $N:=|Q_M|$, siis tilojen lukumäärä $M$:n kuvauksesta\\
+Simuloi $M$:ää syötteellä $w$
+enintään $N$ siirtymää pitäen kirjaa ohjaustiloista missä käyty
+
+\begin{itemize}
+\item Jos simulaation aikana jokin tila toistuu, hyväksytään
+\item Jos $M$ pysähtyy ennen toistoa, hylätään
+\item Simulaatio on rajattu $N$ askeleeseen jolloin $D$ pysähtyy aina
+\end{itemize}
+
+jos jokin tila toistuu jossain vaiheessa, kyyhkyslakkaperiaate
+takaa, että toisto tapahtuu viimeistään $N$ askeleen kuluessa 
+(koska $N+1$ tilakäyntiä $N$:ssä tilassa pakottaa kahden käynnin 
+osumaan samaan tilaan). \\
+
+\rightarrow \, Siksi $D$ havaitsee toiston ja hyväksyy.
+Jos toistoa ei ole, silloin $M$ pysähtyy ilman toistoa 
+(hylkäys yllä), tai muuten $N$ askelta myöhemminkään toistoa 
+ei esiinny — mikä on mahdotonta, joten tätä tapausta ei synny. 
+Siis $D$ päättää kielen $T$
+\end{proof}
+
 
 
 \end{document}

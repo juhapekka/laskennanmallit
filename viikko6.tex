@@ -1,0 +1,340 @@
+\documentclass[12pt,a4paper]{article}
+\input{yhteiset-asetukset.tex}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta}
+\usepackage{amssymb,amsmath,graphicx,color}
+\usepackage{forest}
+\usepackage{siunitx}
+\usepackage{amsthm}
+
+\newtheorem{lause}{Lause}
+\renewcommand{\proofname}{Todistus}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+\newcommand{\set}[1]{\left\{\,#1\,\right\}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Pot}{{\cal P}}
+
+\newcommand{\rma}{\mathrm{a}}
+\newcommand{\rmb}{\mathrm{b}}
+\newcommand{\rmc}{\mathrm{c}}
+\newcommand{\code}[1]{\left\langle\,#1\,\right\rangle}
+\newcommand{\Pee}{\mathrm{P}}
+
+
+
+\title{TKT20005 Laskennan mallit Viikko6}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\exercise{1 Pysähtymisongelma.} Tässä tehtävässä pyritään ymmärtämään pysähtymisongelman määritelmä.\\
+
+Mitä voit päätellä seuraavien väittämien totuusarvoista
+kurssilla tähän mennessä esitettyjen määritelmien ja
+tulosten perusteella?
+(Vaihtoehdot ovat siis ''tosi'', ''epätosi'' ja
+''annetut tiedot eivät riitä asian ratkaisemiseen''.)
+Perustele.
+\begin{alakohta}
+\item
+On olemassa algoritmi, joka ratkaisee mille tahansa
+ohjelmalle $P$, millä syötteillä $P$ pysähtyy
+ja millä ei.\\
+
+{\bf epätosi}
+
+(sivu 225)\\
+Jos olisi algoritmi, joka kaikille ohjelmille ratkaisee, millä 
+syötteillä $P$ pysähtyy ja millä ei, siitä tulisi
+ratkaisija Universaalikielen pysähtymisongelmaan.\\
+
+\item
+On olemassa sellainen ohjelma $P$, että mikään algoritmi
+ei pysty ratkaisemaan, millä syötteillä $P$ pysähtyy
+ja millä ei.\\
+
+{\bf tosi}
+
+On olemassa tietty ohjelma $P$,
+jonka pysähtymissyötteiden joukko ei ole ratkeava;
+Universaali simulaattori $U$:
+Ohjelma $P$, Syötteellä $y$: tulkitse $y$ koodina
+$\langle M,w\rangle$ ja simuloi $M$:ää syötteellä $w$; 
+jos $M$ pysähtyy, myös $P$ pysähtyy.\\
+
+Tällöin $P$:n pysähtymisjoukko on $H$
+joka ei ole ratkeava. Eli jonkin $P$:n kohdalla ei
+ole algoritmia, joka kertoisi kaikille syötteille
+pysähtyykö P\\
+
+
+\item
+Kaikille ohjelmille $P$ pätee, että mikään algoritmi
+ei pysty ratkaisemaan, millä syötteillä $P$ pysähtyy
+ja millä ei.\\
+
+{\bf epätosi}
+
+Väite on liian kattava.\\
+Vastatapaus: ohjelma, joka pysähtyy kaikilla syötteillä
+(pysähtymisjoukko $\Sigma^*$, siis ratkeava), tai ohjelma, 
+joka ei pysähdy millään syötteellä
+(pysähtymisjoukko $\emptyset$, eli taas ratkeava)
+
+\end{alakohta}
+
+
+
+
+\pagebreak
+\exercise{2 Turing-ratkeamattomuus.} Tässä tehtävässä harjoitellaan, kuinka jokin kieli todistetaan ratkeamattomaksi.
+    
+Tarkastellaan kieltä
+\[A=\set{\code{M,w,q}\mid
+\mbox{$M$ on Turingin kone, joka syötteellä $w$ menee ainakin kerran
+  tilaan $q$}}.\] Viime viikon tehtävässä 3 todistimme, että tämä kieli on Turing-tunnistettava.
+
+Todista, että kieli $A$ ei ole ratkeava.\\
+
+\bigskip
+
+    
+Tehdään vastaoletus että $A$ on ratkeava. Olkoon $R$ Turingin kone
+joka päättää $A$\\
+
+Käyttämällä apuna konetta $R$ hyväksymisongelma
+\[
+A_{\mathrm{TM}}=\{\langle M,w\rangle \mid \text{$M$ hyväksyy syötteen $w$}\}
+\]
+voitaisiin ratkaista Turingin koneell, joka syötteellä $y$ toimii:
+\begin{alakohta}
+\item Jos $y$ ei ole muotoa $\langle M,w\rangle$, hylkää
+
+\item Poimi $M$:n koodista sen hyväksyvä tila $q_{\mathrm{acc}}$ ja muodosta
+      $\langle M,w,q_{\mathrm{acc}}\rangle$
+
+\item Simuloi konetta $R$ syötteellä $\langle M,w,q_{\mathrm{acc}}\rangle$
+      \begin{itemize}
+        \item Jos $R$ hyväksyi, niin hyväksy
+        \item Jos $R$ hylkäsi, niin hylkää
+      \end{itemize}
+\end{alakohta}
+
+$M$ hyväksyy $w$ täsmälleen silloin, kun sen laskennassa
+syötteellä $w$ vieraillaan tilassa $q_{\mathrm{acc}}$ ainakin kerran;
+eli täsmälleen silloin kun $\langle M,w,q_{\mathrm{acc}}\rangle\in A$.
+Koska $R$ päättää $A$:n, yllä oleva kone päättää $A_{\mathrm{TM}}$.
+
+Mutta $A_{\mathrm{TM}}$ ei ole ratkeava mistä seuraa ristiriita. Siis $A$ ei ole ratkeava. \qed
+
+
+
+
+
+
+
+
+\pagebreak
+\exercise{3 Vaativuusluokka $\Pee$} Tässä tehtävässä harjoitellaan, kuinka ongelma määritellään formaalina kielenä ja kuinka todistetaan, että jokin ongelma kuuluu vaativuusluokkaan $\Pee$.
+  
+  Tarkastellaan seuraavaa ongelmaa:
+
+  \hspace{0.5cm}{\bf Annettu:} Lista kokonaislukuja $L$ ja kokonaisluku $k$.
+
+  \hspace{0.5cm}{\bf Kysymys:} Esiintyykö $k$ listassa $L$?
+
+  \begin{enumerate}
+  \item Esitä yllä annettu ongelma formaalina kielenä.
+  \item Todista, että määrittelemäsi formaali kieli kuuluu luokkaan $\Pee$.
+  \end{enumerate}
+
+  \bigskip
+
+\begin{alakohta}
+\item Esitä yllä annettu ongelma formaalina kielenä.\\
+
+Käytetään aakkostoa $\Sigma=\{0,1,\#,-\}$. \\
+Määritellään kokonaislukujen koodijoukko binäärisenä
+\[
+E \;=\; \{\,0\,\} \;\cup\; \{\, s\,1x \mid s\in\{\varepsilon,-\},\ x\in\{0,1\}^{*} \,\}
+\]
+eli luvun koodi on joko $0$ tai \{valinnainen miinus + $1$ + mielivaltainen bittijono\}\\
+Silloin päätös ongelmaa esiintyykö $k$ listassa $L$? esittävä kieli on (\#\# erottaa 
+"listan" ja "kohteen")
+\[
+L \;=\; \{\, u_1\#u_2\#\cdots\#u_m\#\#v \mid m\ge 0,\ \forall i:\ u_i\in E,\ v\in E,\ \exists i:\ u_i=v \,\}
+\]
+
+
+\pagebreak
+
+\item Todista, että määrittelemäsi formaali kieli kuuluu luokkaan $\Pee$.\\
+
+\[
+\mathrm{B}
+=\bigl\{\,\langle L,k\rangle \mid \text{$k$ esiintyy listassa $L$}\,\bigr\}
+=\bigl\{\,u_1\#\cdots\#u_m\#\#v \mid \exists i:\ u_i=v\,\bigr\}
+\]
+
+Väite: $\mathrm{B}\in \mathbf{P}$\\
+
+
+Laajennetaan nauha-aakkostoa työsymboleilla $r$ ja $t$
+joilla merkitään jo verratut bitit. Syöte $x$, pituus $n$, on muodossa
+$u_1\#\cdots\#u_m\#\#v$
+
+\begin{enumerate}
+  \item Muototarkistus.\\
+   Kulje vasemmalta oikealle ja tarkista muoto
+        $u_1\#\cdots\#u_m\#\#v$ ja että jokainen lohko on koodista
+        $E=\{0\}\cup 1\{0,1\}^*$. Jos ei, hylkää
+  \item \emph{Vertaa jokaista $u_i$:tä $v$:hen merkitsemällä.}
+        Käy listalohkot $u_1,\ldots,u_m$ vasemmalta oikealle:
+        \begin{enumerate}
+          \item Palauta (tarvittaessa) $v$ ennalleen: korvaa kaikki
+                $r, t$ $v$-osassa takaisin $0,1$:iksi
+          \item Aloita $u_i$:n alusta. Toista:
+                \begin{itemize}
+                  \item Etsi $u_i$:stä vasemmalta lukien ensimmäinen merkitsemätön
+                        symboli. Jos sellaista ei ole (eli tuli vastaan `\#`), tarkasta että
+                        myös $v$:ssä ei ole merkitsemättömiä $0/1$-symboleja.
+                        Jos ei ole, hyväksy
+                  \item Lue löytynyt bitti $b\in\{0,1\}$; siirry $v$:n alkuun (skannaa `\#\#`)
+                        ja etsi $v$:stä ensimmäinen merkitsemätön bitti.
+                        Jos bitti on $b$, merkitse molemmat (kirjoita
+                        $0\mapsto r$ tai $1\mapsto t$  sekä $u_i$:ssä että $v$:ssä) ja palaa
+                        $u_i$:n alkuun jatkamaan
+                \end{itemize}
+        \end{enumerate}
+  \item Jos kaikki lohkot käsiteltiin ilman hyväksyntää, hylkää.
+\end{enumerate}
+
+\textbf{Aika-analyysi.}
+Kukin merkintä/vasta-merkinnän palautus voi vaatia pään siirtelyä
+korkeintaan $O(n)$ solun yli (edestakaisin listan ja $v$:n välillä).
+Yhtä lohkoa kohden merkitään enintään sen pituus + $|v|$ symboleja,
+ja koko syötteen eri lohkoissa on yhteensä $O(n)$ symboleja.
+Siten kokonaisaika on $O(n)\cdot O(n)=O(n^2)$.
+Polynominen aika $\Rightarrow\ \mathrm{B}\in\mathbf{P}$
+
+\end{alakohta}
+
+
+
+
+
+\pagebreak
+\exercise{4 Lisäharjoitusta ratkeamattomuustodistuksiin. }
+Tavoitteena on laatia ohjelmantarkastustyökalu, johon voi ladata
+tarkastettavaksi minkä tahansa Python-ohjelman.
+Käyttäjä valitsee haluamansa syötteen annettavaksi
+tarkastettavalle ohjelmalle.
+Lisäksi käyttäjä valitsee ohjelmasta jonkin koodirivin.
+Tarkastustyökalun tehtävänä on päättää,
+suorittaisiko tarkastettava ohjelma
+valitun koodirivin ainakin kerran, kun ohjelmalle annetaan
+valittu syöte.\\
+
+Onko tällainen tarkastustyökalu mahdollista toteuttaa niin,
+että se varmasti toimii oikein millä tahansa ohjelmalla,
+syötteellä ja ohjelmasta valitulla koodirivillä?
+Perustele.\\
+
+
+
+\bigskip
+
+Olkoon {\sc Rivi} kieli mikä sisältää kolmikot $\langle P,x,\ell\rangle$,
+kun Python-ohjelma $P$ syötteellä $x$ suorittaa koodirivin $\ell$ ainakin kerran.
+
+\bigskip
+\noindent\textbf{Väite} \\
+Kieli {\sc Rivi} ei ole ratkeava; siis pyydettyä työkalua,
+joka aina pysähtyy ja vastaa oikein kaikilla syötteillä, ei ole olemassa
+
+\bigskip
+\noindent\textbf{Perustelu} (hyväksymisongelmasta $A_{\rm TM}$)\\
+Tiedetään että hyväksymisongelma
+\[
+A_{\rm TM}=\{\langle M,w\rangle \mid \text{$M$ hyväksyy syötteen $w$}\}
+\]
+on ratkeamaton.\\
+
+Näytetään että jos {\sc Rivi} olisi ratkeava, myös $A_{\rm TM}$ olisi,
+mikä on mahdotonta\\
+
+Annetulle parille $\langle M,w\rangle$ rakennetaan Python-ohjelma $P_{M,w}$,
+joka tekee:
+
+\begin{quote}\ttfamily
+simuloi $M$:ää syötteellä $w$;\\
+\ \ $M$ \emph{hyväksyy}: suorita \underline{rivi L} ja pysähdy;\\
+\ \ $M$ \emph{hylkää} tai ei pysähdy: älä koskaan suorita riviä L
+\ (esim.\ jää silmukkaan)
+\end{quote}
+
+Tällöin
+\[
+\langle M,w\rangle\in A_{\rm TM}
+\iff
+\text{$P_{M,w}$ suorittaa rivin $L$ syötteellä $x$}
+\]
+(riippumatta vakiovalinnasta $x$, esim.\ $x=\varepsilon$)\\
+
+
+Jos meillä olisi päät­tävä työkalu $C$ ongelmaan {\sc Rivi}, voisimme ratkaista
+$A_{\rm TM}$:n algoritmilla: syötteellä $\langle M,w\rangle$ muodosta
+$\langle P_{M,w},x,L\rangle$ ja palauta $C$:n vastaus. Tämä tekisi
+$A_{\rm TM}$:stä ratkeavan eli siis ristiriita.\\
+
+Siksi {\sc Rivi} ei ole ratkeava, eikä pyydettyä yleispätevää tarkastustyökalua
+voi toteuttaa. \qed
+
+
+
+
+
+\pagebreak
+\exercise{5 Kieli, joka ei ole Turing-tunnistettava.}
+  Todista, että kieli
+\[B=\set{\code{M,w,q}\mid
+\mbox{$M$ on Turingin kone, joka syötteellä $w$ {\it ei mene} kertaakaan
+tilaan $q$}}.\]
+ei ole Turing-tunnistettava.
+
+({\em Vihje:} Tarkastele kielen $B$ komplementtia ja hyödynnä luentomonisteen lausetta 4.7 sekä tehtävän 2 ja viime viikon tehtävän 3 tulosta, että kieli
+\[
+A=\set{\code{M,w,q}\mid
+\mbox{$M$ on Turingin kone, joka syötteellä $w$ menee ainakin kerran
+  tilaan $q$}}
+\]
+on Turing-tunnistettava, mutta ei ratkeava.)
+
+\bigskip
+
+Olkoon
+\[
+A=\{\langle M,w,q\rangle \mid \text{$M$ syötteellä $w$ käy ainakin kerran tilassa $q$}\}
+\]
+ja
+\[
+B=\{\langle M,w,q\rangle \mid \text{$M$ syötteellä $w$ \emph{ei} käy kertaakaan tilassa $q$}\}
+\]
+Selvästi $B=\overline{A}$ (komplementti hyvinmuodostettujen kolmikkojen joukossa)\\
+
+
+Viime viikolla todistettiin, että $A$ on Turing-tunnistettava, mutta ei ratkeava.
+Oletetaan, että $B$ olisi Turing-tunnistettava. Tällöin sekä $A$ että
+$\overline{A}$ olisivat tunnistettavia ja Lauseen~4.7
+mukaan $A$ olisi ratkeava. Tämä on ristiriidassa edellä mainitun tuloksen kanssa.\\
+
+Siis $B$ \emph{ei} ole Turing-tunnistettava. \(\square\)
+
+
+
+\end{document}
