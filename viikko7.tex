@@ -10,19 +10,261 @@
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Pot}{{\cal P}}
+\newcommand{\NPee}{\mathrm{NP}}
+\newcommand{\code}[1]{\left\langle\,#1\,\right\rangle}
 
 \newcommand{\rma}{\mathrm{a}}
 \newcommand{\rmb}{\mathrm{b}}
 \newcommand{\rmc}{\mathrm{c}}
 
-\title{TKT20005 Laskennan mallit Viikko5}
+
+\newcommand{\Pee}{\mathrm{P}}
+
+
+\title{TKT20005 Laskennan mallit Viikko7}
 \date{}
 
 \begin{document}
 
 \maketitle
 
-\exercise{1 }
+\exercise{1 Esimerkkejä $\NPee$-täydellisistä ongelmista.} Tässä tehtävässä tutustutaan muutamaan esimerkkiin $\NPee$-täydellisistä ongelmista ja opetellaan määrittelemään ongelmia formaaleina kielinä.
+  
+{\em Ositus} (partition),
+{\em laatikonpakkaus} (bin packing) ja {\em verkon värittäminen} (graph coloring) ovat kolme tunnettua
+$\NPee$-täydellistä ongelmaa.
+Etsi nämä ongelmat oppikirjoista tai verkosta ja selitä,
+mistä niissä on kysymys.
+Sopiva vastaus on lyhyt sanallinen kuvaus ongelmalle ja sen
+täsmällinen esitys formaalina kielenä.
 
+\bigskip
+
+\begin{alakohta}
+
+\item \textbf{Ositus (Partition) https://en.wikipedia.org/wiki/Partition\_problem}\\
+Annettuna monijoukko kokonaislukuja $(a_1,\ldots,a_n)$. Onko se jaettavissa
+kahteen osaan, joiden summat ovat samat?\\[2pt]
+\emph{Kielenä:}
+\[
+\textsc{PARTITION}
+=\Bigl\{\,\langle a_1,\ldots,a_n\rangle\ \Bigm|\ \exists I\subseteq\{1,\ldots,n\}:\ 
+\sum_{i\in I} a_i \;=\; \sum_{i\notin I} a_i \,\Bigr\}.
+\]
+
+\item \textbf{Laatikonpakkaus (Bin Packing) https://en.wikipedia.org/wiki/Bin\_packing\_problem}\\
+Annettuna esineiden koot $s_1,\ldots,s_n$, laatikon kapasiteetti $B$ ja
+laatikkomäärä $k$. Voidaanko kaikki esineet jakaa enintään $k$ laatikkoon siten, että
+kunkin laatikon kokonaiskoko $\le B$?\\[2pt]
+\emph{Kielenä:}
+\[
+\textsc{BINPACK}
+=\Bigl\{\,\langle s_1,\ldots,s_n,B,k\rangle\ \Bigm|\ 
+\exists f:\{1,\ldots,n\}\to\{1,\ldots,k\}\ \text{siten, että}\ 
+\forall j\in\{1,\ldots,k\}:\ \sum_{i:\,f(i)=j} s_i \le B \,\Bigr\}.
+\]
+
+\item \textbf{Verkon värittäminen (3-väritys) https://en.wikipedia.org/wiki/Graph\_coloring}\\
+Annettuna suunnaton verkko $G=(V,E)$. Onko solmut väritettävissä
+kolmella värillä niin, että mikään kaaren päätepistepari ei saa samaa väriä?\\[2pt]
+\emph{Kielenä:}
+\[
+\textsc{3COLOR}
+=\Bigl\{\,\langle G\rangle\ \Bigm|\ \exists c:V\to\{1,2,3\}\ \text{siten, että}\ 
+\forall \{u,v\}\in E:\ c(u)\neq c(v) \,\Bigr\}.
+\]
+
+\end{alakohta}
+
+
+
+
+
+\pagebreak
+\exercise{2 Luokan $\NPee$ ongelmat.} Tässä tehtävässä harjoitellaan, kuinka todistetaan, että jokin ongelma kuuluu luokkaan $\NPee$.
+  
+{\em Repunpakkausongelmassa} (knapsack problem)
+on annettu joukko esineitä $I$, jokaiselle esineelle $i\in I$
+sen arvo $v_i\in\N$ ja paino $w_i\in\N$, repun painoraja $W\in\N$
+ja tavoiteltu kokonaisarvo $V\in\N$.
+Tehtävänä on ratkaista, onko mahdollista valita joukko $J\subseteq I$
+esineitä reppuun pakattavaksi niin, että niiden yhteenlaskettu
+arvo on ainakin $V$, mutta painoraja $W$ ei ylity.
+Formaalina kielenä tämän voi määritellä
+\[\mathit{KNAPSACK}=\{\,\code{I,v,w,V,W}\mid
+\mbox{jollain $J\subseteq I$ pätee $\sum_{j\in J}w_j\leq W$ ja %
+$\sum_{j\in J}v_j\geq V$}\,\}.\]
+\begin{enumerate}
+\item
+Osoita, että kieli {\it KNAPSACK} kuuluu luokkaan $\NPee$.
+Sopiva vastauksen tarkkuustaso on joko polynomisessa ajassa toimivan
+epädeterministisen Turingin koneen tai polynomisen tarkastajan
+kuvaus samaan tapaan kuin kurssimateriaalissa esim.\ 
+$\mathit{CLIQUE}$-ongelmalle (luennot s.\ 259; Sipser s.\ 296).
+\item {\bf Vapaaehtoinen lisätehtävä pohdittavaksi:} 
+Repunpakkausongelmalle tunnetaan ajassa $O(nW)$ toimiva algoritmi,
+missä $n=\abs{I}$ on esineiden lukumäärä.
+Minkä takia
+tästä ei seuraa $\mathit{KNAPSACK}\in\Pee$?
+\end{enumerate}
+{\em Lisätieto:} {\it KNAPSACK} on tunnettu NP-täydellinen ongelma.
+
+\bigskip
+
+
+
+https://en.wikipedia.org/wiki/Knapsack\_problem
+
+\paragraph{} Given a set of items, each with a weight and a value, determine which items to include in the collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.
+
+\bigskip
+
+\begin{alakohta}
+\item \textbf{KNAPSACK $\in \NPee$.}
+Käytetään binäärikoodausta; instanssi
+$x=\langle (v_1,w_1),\ldots,(v_n,w_n),V,W\rangle$
+
+\emph{Sertifikaatti:} bittijono $b\in\{0,1\}^n$, jossa $b_i=1$
+iff esine $i$ valitaan.
+
+\emph{Verifioija:} laskee
+\[
+S_w=\sum_{i=1}^n b_i w_i,\qquad S_v=\sum_{i=1}^n b_i v_i
+\]
+ja \textbf{hyväksyy} iff $S_w\le W$ ja $S_v\ge V$.
+
+Koska summat ja vertailut binääriluvuilla vievät aikaa
+$\mathrm{poly}(|x|)$, tarkastus on polynominen. 
+
+Siis 
+$\mathit{KNAPSACK}\in\NPee$
+\end{alakohta}
+
+
+
+
+
+
+\pagebreak
+\exercise{3 $\NPee$-täydellisyys ja $\Pee$ vs $\NPee$ -ongelma.} Tässä tehtävässä tarkastellaan, miten $\NPee$-täydellisyys ja $\Pee$ vs $\NPee$ -ongelma liittyvät toisiinsa.
+  
+Kuten muistetaan, Hamiltonin polku -ongelma {\it HAMPATH} on tunnettu
+$\NPee$-täydellinen ongelma.
+\begin{enumerate}
+\item
+Oletetaan, että joku löytää polynomisessa ajassa toimivan
+ratkaisualgoritmin Hamiltonin polku -ongelmalle.
+Mitä tästä seuraa $\Pee$ vs.\ $\NPee$ -ongelmalle?
+\item
+Entä jos joku todistaa, että Hamiltonin polku -ongelmaa ei ole mahdollista
+ratkaista polynomisessa ajassa?
+Mitä tästä seuraa $\Pee$ vs.\ $\NPee$ -ongelmalle?
+\item Oletetaan, että joku todistaa, että $\Pee=\NPee$. Mitä tästä seuraa Hamiltonin polku \mbox{-ongelmalle?}
+\item Entä jos joku todistaa, että $\Pee\neq\NPee$? Mitä tästä seuraa Hamiltonin polku -ongelmalle?
+\end{enumerate}
+Kaikissa kohdassa perustele vastauksesi täsmällisesti
+lähtien luokan $\NPee$ ja $\NPee$-täydellisyyden määritelmistä ja tiedosta,
+että {\it HAMPATH} on $\NPee$-täydellinen.
+Siis tarkoitus ei ole käyttää suoraan esim.\ lausetta~5.27,
+vaan esittää sen taustalla oleva päättely tähän
+tilanteeseen sovellettuna.
+
+\bigskip
+
+\begin{alakohta}
+\item % (1)
+\textbf{Jos $\mathit{HAMPATH}$ ratkaistaan polynomiajassa, niin $P=NP$}\\
+Koska $\mathit{HAMPATH}$ on NP-täydellinen, pätee
+(i) $\mathit{HAMPATH}\in NP$ ja
+(ii) jokaiselle $L\in NP$ on polynominen monikoinen reduktio $L \le_m^p \mathit{HAMPATH}$.
+Oletuksesta $\mathit{HAMPATH}\in P$ ja (ii):sta seuraa, että \emph{kaikki} $L\in NP$ ovat
+myös luokassa $P$ (komponeeraamalla reduktion ja $\mathit{HAMPATH}$:n poli-algoritmin).
+Siis $NP\subseteq P$. Toisaalta aina $P\subseteq NP$, joten $P=NP$.
+
+\item % (2)
+\textbf{Jos $\mathit{HAMPATH}$:lle ei ole polynomista algoritmia, niin $P\neq NP$.}\\
+Koska $\mathit{HAMPATH}\in NP$ (NP-täydellisyyden ehto (i)), väite “ei ole polynomista
+algoritmia” tarkoittaa $\mathit{HAMPATH}\notin P$. Tällöin on olemassa NP-kieli, joka ei kuulu
+$P$:hen, joten $P\neq NP$ (koska aina $P\subseteq NP$).
+
+\item % (3)
+\textbf{Jos $P=NP$, niin $\mathit{HAMPATH}\in P$.}\\
+NP-täydellisyyden ehto (i): $\mathit{HAMPATH}\in NP$. Yhtälöstä $P=NP$ seuraa
+suoraan, että $\mathit{HAMPATH}\in P$.
+
+\item % (4)
+\textbf{Jos $P\neq NP$, niin $\mathit{HAMPATH}\notin P$.}\\
+Oletetaan vastaoletuksena $\mathit{HAMPATH}\in P$.
+Koska ehto (ii) sanoo, että jokainen $L\in NP$ redusoituu polynomiajassa
+$\mathit{HAMPATH}$:iin, tästä seuraisi $NP\subseteq P$.
+Yhdessä triviaalin $P\subseteq NP$ kanssa saataisiin $P=NP$, mikä
+on ristiriidassa oletuksen $P\neq NP$ kanssa.
+Siis $\mathit{HAMPATH}\notin P$.
+\end{alakohta}
+
+
+\pagebreak
+\exercise{4 Polynomisen reduktion transitiivisuus.} Luentomateriaalissa lauseen~5.29 todistuksessa käytettiin tässä tehtävässä todistettavaa lemmaa: jos $A\leq_P B$ ja $B\leq_P C$, niin $A\leq_P C$. Tämä tehtävä siis täydentää luentomateriaalia tältä osin.
+  
+Oletetaan, että funktiot
+$f\colon\Sigma^\ast\rightarrow\Sigma^\ast$ ja
+$g\colon\Sigma^\ast\rightarrow\Sigma^\ast$ 
+voidaan laskea polynomisessa ajassa.
+Osoita, että myös yhdistetty funktio
+$h\colon\Sigma^\ast\rightarrow\Sigma^\ast$, missä $h(x)=g(f(x))$, 
+voidaan laskea polynomisessa ajassa.
+Päättele tästä edelleen, että jos
+$A\leq_P B$ ja $B\leq_P C$, niin $A\leq_P C$.
+
+{\em Huom.}
+Muista, että aikavaativuus määritellään
+syötteen koon suhteen.
+Ota huomioon, minkä kokoisilla syötteillä funktion
+$g$ arvoa lasketaan.
+
+\bigskip
+
+
+
+
+{\bf lemma}\\
+olkoon $f,g:\Sigma^*\to\Sigma^*$ polynomiajassa laskettavia.
+Tällöin myös $h(x)=g(f(x))$ on polynomiajassa laskettava.\\
+
+\emph{Todistus.}
+On olemassa polynomit $p,s$ siten, että $f$ voidaan laskea ajassa $p(n)$
+syötteen pituudella $n$, ja $g$ voidaan laskea ajassa $s(m)$ syötteen
+pituudella $m$.\\
+
+Kun lasketaan $h(x)$ syötteellä $x$, tehdään ensin $f(x)$ ajassa $p(|x|)$.
+Samalla saadaan $\lvert f(x)\rvert \le p(|x|)$, koska yhden merkin kirjoituskin
+vie yhden askeleen.
+
+Seuraavaksi ajetaan $g$ syötteellä $f(x)$; tämän aika on
+$s(\lvert f(x)\rvert)\le s(p(|x|))$.
+Kokonaisaika on siis
+\[
+T_h(|x|) \;\le\; p(|x|)\;+\;s(p(|x|))
+\]
+mikä on polynomi koska polynomin sijoitus polynomiin on polynomi \\
+
+Siis $h$ on polynomiajassa laskettava. \quad \(\square\)
+
+\bigskip
+\textbf{Seuraus.}
+Jos $A\le_P B$ funktiolla $f$ ja $B\le_P C$ funktiolla $g$, määritä $h=g\circ f$.
+Lemmasta $h$ on polynominen\\
+ Lisäksi kaikilla $x$:
+\[
+x\in A \iff f(x)\in B \iff g(f(x))\in C \iff h(x)\in C
+\]
+Siksi $A\le_P C$ \quad \(\square\)
+
+\medskip
+\emph{Huom} \Rightarrow\, aikavaativuus määritellään syötteen koon suhteen:\\
+
+g:n aika riippuu sen oman syötteen pituudesta $|f(x)|$, joka on
+polynomisesti sidottu $|x|$:ään, koska $f$ on polynominen ja ei voi tulostaa
+enempää symbooleja kuin mitä sen laskenta askeleita on
 
 \end{document}
